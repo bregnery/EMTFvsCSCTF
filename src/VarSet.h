@@ -5,7 +5,6 @@
 #ifndef ADD_VARSET
 #define ADD_VARSET
 
-#include "DataFormats.h"
 #include "TLorentzVector.h"
 
 class VarSet
@@ -14,22 +13,9 @@ class VarSet
         VarSet(){};
         ~VarSet(){};
 
-        _EventInfo eventInfo;
-        _VertexInfo vertices;
-        _MuonInfo reco1;
-        _MuonInfo reco2;
-        _MetInfo met;
-        _PFJetInfo jets;
-        std::vector<TLorentzVector> validJets;
- 
-        float recoCandMass, recoCandMassPF;
-        float recoCandPt, recoCandPtPF;
-	float inverseDiMuPt;
-	float recoCandY, recoCandYPF;
-	float recoCandPhi, recoCandPhiPF;
-        float rho;
-        int genWeight;
-        int nPU;
+        float recoPt, trkPt, csctf_trkPt;
+	float recoEta, trkEta, csctf_trkEta;
+	float trkMode;
 };
 
 #endif

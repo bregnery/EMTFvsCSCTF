@@ -64,7 +64,6 @@ Sample::~Sample() {
 
 void Sample::setBranchAddresses()
 {
-    tree->SetBranchAddress("recoCandMass", &vars.recoCandMass);
     tree->SetBranchAddress("recoPt", &vars.recoPt);
     tree->SetBranchAddress("trkPt", &vars.trkPt);
     tree->SetBranchAddress("csctf_trkPt", &vars.csctf_trkPt);

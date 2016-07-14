@@ -10,6 +10,7 @@
 #include "TEntryList.h"
 
 #include "VarSet.h"
+#include "DataFormats.h"
 
 class Sample
 {
@@ -25,7 +26,6 @@ class Sample
 	//TTree* outTree;
 
         TString dir;           // DAS directory
-        TString pileupfile;    // used for pile up reweighting through lumiWeights
         TString sampleType;    // "data", "signal", "background"
 
         int nOriginal;         // the number of events run over to get this sample
