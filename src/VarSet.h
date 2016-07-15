@@ -5,6 +5,8 @@
 #ifndef ADD_VARSET
 #define ADD_VARSET
 
+#include <vector>
+#include <iostream>
 #include "TLorentzVector.h"
 
 class VarSet
@@ -13,9 +15,10 @@ class VarSet
         VarSet(){};
         ~VarSet(){};
 
-        float recoPt, trkPt, csctf_trkPt;
-	float recoEta, trkEta, csctf_trkEta;
-	float trkMode;
+        std::vector<float> *recoPt, *trkPt, *csctf_trkPt;
+	std::vector<float> *recoEta, *trkEta, *csctf_trkEta;
+	std::vector<float> *trkMode;
+	std::vector<float> *trkPhi, *csctf_trkPhi;
 };
 
 #endif

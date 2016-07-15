@@ -71,6 +71,8 @@ void Sample::setBranchAddresses()
     tree->SetBranchAddress("trkEta", &vars.trkEta);
     tree->SetBranchAddress("csctf_trkEta", &vars.csctf_trkEta);
     tree->SetBranchAddress("trkMode", &vars.trkMode);
+    tree->SetBranchAddress("trkPhi", &vars.trkPhi);
+    tree->SetBranchAddress("csctf_trkPhi", &vars.csctf_trkPhi);
 }
 
 /*

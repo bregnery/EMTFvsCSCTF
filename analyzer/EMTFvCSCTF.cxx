@@ -1,4 +1,6 @@
 #include "../src/Sample.h"
+#include "../selection/Cuts.h"
+#include "SampleHistos.h"
 
 #include "TLorentzVector.h"
 
@@ -45,4 +47,26 @@ int main()
     // Debugging
     //Sample sample;
     //std::cout << "lumi: " << sample.lumi << std::endl;
+ 
+    ///////////////////////////////////////////////////////////////////
+    // Cuts------------------------------------------------------------
+    ///////////////////////////////////////////////////////////////////
+    
+    // map containing the cuts
+    std::map<std::string, Cuts*> cuts;   
+                        
+    std::cout << "=========== Applying Selection Criteria to Data ======" << std::endl;
+    cuts["Data"] = new Cuts(samples["Data"]);
+
+    ///////////////////////////////////////////////////////////////////
+    // Histograms------------------------------------------------------
+    ///////////////////////////////////////////////////////////////////    
+    
+    // map containg the Histogram variables
+    std::map<std::string, SampleHistos*> sampleHistos;
+    
+    std::cout << "=========== Creating Data Histogram file ===========" << std::endl;
+    sampleHistos["Data"] = new SampleHistos(samples["Data"], cuts["Data"]->isMatched, "Comparison");
+
+    return 0;
 }
