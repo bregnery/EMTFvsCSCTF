@@ -26,6 +26,6 @@ class Cuts
 	// Selection criteria, each void function contains a different set of cuts
 	void Matched(int i);
 	// Function for calculating delta R
-	void DeltaR(int i);
+	void DeltaR(unsigned i);
 };
 #endif

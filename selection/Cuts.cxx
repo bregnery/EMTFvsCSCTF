@@ -43,7 +43,7 @@ void Cuts::Matched(int i)
 
    // Create a temp vector to pass to the real vector
    std::vector<bool> temp;
-   int d = 0;
+   unsigned d = 0;
 
    sample->getEntry(i);
 
@@ -74,11 +74,11 @@ void Cuts::Matched(int i)
 //-----------------------------------------------------------//
 ///////////////////////////////////////////////////////////////
 
-void Cuts::DeltaR(int j)
+void Cuts::DeltaR(unsigned j)
 {
 // Calculates Delta R
 
-   float deltaPhi = sample->vars.csctf_trkPhi[j] std::minus sample->vars.trkPhi[j];
-   float deltaEta = sample->vars.csctf_trkEta[j] std::minus  sample->vars.trkEta[j]; 
-   deltaR = TMath::Sqrt(deltaPhi*deltaPhi std::plus deltaEta*deltaEta);
+   float deltaPhi = sample->vars.csctf_trkPhi->at(j) - sample->vars.trkPhi->at(j);
+   float deltaEta = sample->vars.csctf_trkEta->at(j) -  sample->vars.trkEta->at(j); 
+   deltaR = TMath::Sqrt(deltaPhi*deltaPhi + deltaEta*deltaEta);
 }
