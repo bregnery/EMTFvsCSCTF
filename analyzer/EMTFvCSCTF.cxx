@@ -66,7 +66,7 @@ int main()
     std::map<std::string, SampleHistos*> sampleHistos;
     
     std::cout << "=========== Creating Data Histogram file ===========" << std::endl;
-    sampleHistos["Data"] = new SampleHistos(samples["Data"], cuts["Data"]->isMatched, "Comparison");
+    sampleHistos["Data"] = new SampleHistos(samples["Data"], cuts["Data"], "Comparison");
 
     return 0;
 }

@@ -21,11 +21,12 @@ class Cuts
 	float deltaR;
 
 	// Boolean variables that state whether an event passes a selection criteria
-	std::vector<std::vector<bool> > isMatched;
+	std::vector<std::vector<bool> > EMisMatched;
+	std::vector<std::vector<bool> > CSCisMatched;
 
 	// Selection criteria, each void function contains a different set of cuts
 	void Matched(int i);
 	// Function for calculating delta R
-	void DeltaR(unsigned i);
+	void DeltaR(unsigned j, unsigned k);
 };
 #endif

@@ -16,7 +16,7 @@ class SampleHistos
 {
    public:
 	SampleHistos();
-	SampleHistos(Sample* sample, std::vector<bool> isCut, TString cutName);
+	SampleHistos(Sample* sample, Cuts* cut, TString cutName);
 
 	void setHistTitles(TH1F* hist, TString xtitle, TString ytitle);
 

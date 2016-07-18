@@ -17,7 +17,7 @@ SampleHistos::SampleHistos(){}
 //-------------------------------------------------------------------//
 ///////////////////////////////////////////////////////////////////////
 
-SampleHistos::SampleHistos(Sample* sample, std::vector<bool> isCut, TString cutName)
+SampleHistos::SampleHistos(Sample* sample, Cuts* cut, TString cutName)
 {
    using namespace std;
 
@@ -73,20 +73,33 @@ SampleHistos::SampleHistos(Sample* sample, std::vector<bool> isCut, TString cutN
    {
 	if(i % reportEach == 0) std::cout << "Event: " << i << std::endl;
 
-	// Test if event is matched
-	if(isCut[i] == false)
+	// Fill not matched EMTF tracks
+	for(unsigned j=0; j<cut->EMisMatched[i].size(); j++)
 	{
-	    sample->getEntry(i);
-
-	    // Fill Histograms
-	    EMTFtrackPtHist->Fill(sample->vars.trkPt);
-	    CSCTFtrackPtHist->Fill(sample->vars.csctf_trkPt);
-	    EMTFtrackEtaHist->Fill(sample->vars.trkEta);
-	    CSCTFtrackEtaHist->Fill(sample->vars.csctf_trkEta);
-	    EMTFtrackModeHist->Fill(sample->vars.trkMode);
-	    //CSCTFtrackModeHist->Fill();
+	   // Test if event is matched
+	   if(cut->EMisMatched[i][j] == false)
+	   {
+	        sample->getEntry(i);
+	        // Fill Histograms
+	    	EMTFtrackPtHist->Fill(sample->vars.trkPt->at(j));
+	    	EMTFtrackEtaHist->Fill(sample->vars.trkEta->at(j));
+	    	EMTFtrackModeHist->Fill(sample->vars.trkMode->at(j));
+            }
 	}
 
+	// Fill not matched CSCTF tracks
+	for(unsigned j=0; j<cut->CSCisMatched[i].size(); j++)
+	{
+	   // Test if event is matched
+	   if(cut->CSCisMatched[i][j] == false)
+	   {
+	        sample->getEntry(i);
+	        // Fill Histograms
+	    	CSCTFtrackPtHist->Fill(sample->vars.csctf_trkPt->at(j));
+	    	CSCTFtrackEtaHist->Fill(sample->vars.csctf_trkEta->at(j));
+	    	//CSCTFtrackModeHist->Fill();
+            }
+	}
    }
   
    /////////////////////////////////////////////////////////////////////

@@ -22,7 +22,7 @@ MAIN = EMTFvCSCTF
 ${MAIN}: ${LIBDIR}Sample.o ${SDIR}Cuts.o ${LIBDIR}SampleHistos.o ${MAIN}.o
 	$(CC) $(LIBFLAGS) ${LIBDIR}Sample.o ${SDIR}Cuts.o ${LIBDIR}SampleHistos.o ${MAIN}.o -o ${MAIN}
 
-${MAIN}.o: ${MAIN}.cxx ${LIBDIR}DataFormats.h 
+${MAIN}.o: ${MAIN}.cxx ${LIBDIR}DataFormats.h ${LIBDIR}SampleHistos.h 
 	$(CC) $(CFLAGS) ${MAIN}.cxx -o ${MAIN}.o
 
 # compile the dependencies
