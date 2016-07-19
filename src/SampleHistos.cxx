@@ -63,13 +63,13 @@ SampleHistos::SampleHistos(Sample* sample, Cuts* cut, TString cutName)
    CSCTFtrackModeHist->Sumw2();
 
    // CSCTF mode vs. EMTF mode for matched tracks
-   TH2F* ModeComparisonHist = new TH2F("ModeCamparisonHist","",20,0,20,20,0,20); //bins, xmin, xmax, bins, ymin, ymax
+   TH2F* ModeComparisonHist = new TH2F("ModeComparisonHist","",20,0,20,20,0,20); //bins, xmin, xmax, bins, ymin, ymax
    ModeComparisonHist->GetXaxis()->SetTitle("EMTF Mode");
    ModeComparisonHist->GetYaxis()->SetTitle("CSCTF Mode");
    ModeComparisonHist->Sumw2();
 
    // CSCTF Pt vs. EMTF Pt for mathced tracks
-   TH2F* PtComparisonHist = new TH2F("PtCamparisonHist","",30,0,300,30,0,300); //bins, xmin, xmax, bins, ymin, ymax
+   TH2F* PtComparisonHist = new TH2F("PtComparisonHist","",30,0,300,30,0,300); //bins, xmin, xmax, bins, ymin, ymax
    PtComparisonHist->GetXaxis()->SetTitle("EMTF P_{T} [GeV/c]");
    PtComparisonHist->GetYaxis()->SetTitle("CSCTF P_{T} [GeV/c]");
    PtComparisonHist->Sumw2();
