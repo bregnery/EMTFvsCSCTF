@@ -10,6 +10,7 @@
 #include "../selection/Cuts.h"
 
 #include "TH1F.h"
+#include "TH2F.h"
 #include "TString.h"
 
 class SampleHistos

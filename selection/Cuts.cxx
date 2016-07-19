@@ -76,7 +76,7 @@ void Cuts::Matched(int i)
    EMisMatched.push_back(EMtemp);
 
    // Debugging
-   std::cout << "Event: " << i << " has " << sample->vars.csctf_trkPt->size() << " tracks" << std::endl;
+   //std::cout << "Event: " << i << " has " << sample->vars.csctf_trkPt->size() << " tracks" << std::endl;
 
    // Loop over CSCTF tracks in the event and see if they match 
    for(unsigned j=0; j < sample->vars.csctf_trkPt->size(); j++)
@@ -94,9 +94,9 @@ void Cuts::Matched(int i)
         }
 	
 	// Debugging
-	if(CSCtemp[j]==false){
-	     std::cout << "Event: " << i << " has an unmatched CSC track." << std::endl;
-        }
+	//if(CSCtemp[j]==false){
+	     //std::cout << "Event: " << i << " has an unmatched CSC track." << std::endl;
+        //}
     
    }  
    CSCisMatched.push_back(CSCtemp);

@@ -66,13 +66,14 @@ void Sample::setBranchAddresses()
 {
     tree->SetBranchAddress("recoPt", &vars.recoPt);
     tree->SetBranchAddress("trkPt", &vars.trkPt);
-    tree->SetBranchAddress("csctf_trkPt", &vars.csctf_trkPt);
+    tree->SetBranchAddress("leg_trkPt", &vars.csctf_trkPt);
     tree->SetBranchAddress("recoEta", &vars.recoEta);
     tree->SetBranchAddress("trkEta", &vars.trkEta);
-    tree->SetBranchAddress("csctf_trkEta", &vars.csctf_trkEta);
+    tree->SetBranchAddress("leg_trkEta", &vars.csctf_trkEta);
     tree->SetBranchAddress("trkMode", &vars.trkMode);
+    tree->SetBranchAddress("leg_trkMode", &vars.csctf_trkMode);
     tree->SetBranchAddress("trkPhi", &vars.trkPhi);
-    tree->SetBranchAddress("csctf_trkPhi", &vars.csctf_trkPhi);
+    tree->SetBranchAddress("leg_trkPhi", &vars.csctf_trkPhi);
 }
 
 /*

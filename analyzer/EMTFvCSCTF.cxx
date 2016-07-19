@@ -40,7 +40,7 @@ int main()
     
     std::cout << "============ Accessing Data ===============" << std::endl;           
     
-    TString datafilename = TString("/home/bregnery/EMTFvCSCTF/ntuples/EMTF_NTuple_ZMu_274198_10k.root");
+    TString datafilename = TString("/home/bregnery/EMTFvCSCTF/ntuples/EMTF_NTuple_ZMu_274442_emtfStage2Digis_40k.root");
     //TString datafilename = TString("/cms/data/store/user/t2/users/acarnes/h2mumu/samples/stage1/data_from_json/25ns/golden/stage_1_singleMuon_RunDBoth_MINIAOD_GOLDEN_ALL.root");
     samples["Data"] = new Sample(datafilename, "Data", "data");
 

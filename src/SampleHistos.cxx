@@ -2,7 +2,7 @@
 //                         SampleHistos.cxx                        //
 //=================================================================//
 //                                                                 //
-// Contains functions for producing th analysis's histograms       //
+// Contains functions for producing the analysis's histograms      //
 /////////////////////////////////////////////////////////////////////
 
 #include "SampleHistos.h"
@@ -33,34 +33,46 @@ SampleHistos::SampleHistos(Sample* sample, Cuts* cut, TString cutName)
    ///////////////////////////////////////////////////////////////////
 
    // Pt for unmatched EMTF tracks
-   TH1F* EMTFtrackPtHist = new TH1F("EMTFtrackPtHist","",100,0,800);
+   TH1F* EMTFtrackPtHist = new TH1F("EMTFtrackPtHist","",30,0,350);
    setHistTitles(EMTFtrackPtHist,"P_{T} [GeV/c]","Events");
    EMTFtrackPtHist->Sumw2();
 
    // Pt for unmatched CSCTF tracks
-   TH1F* CSCTFtrackPtHist = new TH1F("CSCTFtrackPtHist","",100,0,800);
+   TH1F* CSCTFtrackPtHist = new TH1F("CSCTFtrackPtHist","",30,0,350);
    setHistTitles(CSCTFtrackPtHist,"P_{T} [GeV/c]","Events");
    CSCTFtrackPtHist->Sumw2();
 
    // Eta for unmatched EMTF tracks
-   TH1F* EMTFtrackEtaHist = new TH1F("EMTFtrackEtaHist","",100,0,6);
+   TH1F* EMTFtrackEtaHist = new TH1F("EMTFtrackEtaHist","",20,0,6);
    setHistTitles(EMTFtrackEtaHist,"#eta","Events");
    EMTFtrackEtaHist->Sumw2();
 
    // Eta for unmatched CSCTF tracks
-   TH1F* CSCTFtrackEtaHist = new TH1F("CSCTFtrackEtaHist","",100,0,6);
+   TH1F* CSCTFtrackEtaHist = new TH1F("CSCTFtrackEtaHist","",20,0,6);
    setHistTitles(CSCTFtrackEtaHist,"#eta","Events");
    CSCTFtrackEtaHist->Sumw2();
 
    // Mode for unmatched EMTF tracks
-   TH1F* EMTFtrackModeHist = new TH1F("EMTFtrackModeHist","",100,0,30);
+   TH1F* EMTFtrackModeHist = new TH1F("EMTFtrackModeHist","",30,0,30);
    setHistTitles(EMTFtrackModeHist,"Mode","Events");
    EMTFtrackModeHist->Sumw2();
 
    // Mode for unmatched CSCTF tracks
-   //TH1F* CSCTFtrackModeHist = new TH1F("CSCTFtrackModeHist","",100,0,30);
-   //setHistTitles(CSCTFtrackModeHist,"Mode","Events");
-   //CSCTFtrackModeHist->Sumw2();
+   TH1F* CSCTFtrackModeHist = new TH1F("CSCTFtrackModeHist","",30,0,30);
+   setHistTitles(CSCTFtrackModeHist,"Mode","Events");
+   CSCTFtrackModeHist->Sumw2();
+
+   // CSCTF mode vs. EMTF mode for matched tracks
+   TH2F* ModeComparisonHist = new TH2F("ModeCamparisonHist","",20,0,20,20,0,20); //bins, xmin, xmax, bins, ymin, ymax
+   ModeComparisonHist->GetXaxis()->SetTitle("EMTF Mode");
+   ModeComparisonHist->GetYaxis()->SetTitle("CSCTF Mode");
+   ModeComparisonHist->Sumw2();
+
+   // CSCTF Pt vs. EMTF Pt for mathced tracks
+   TH2F* PtComparisonHist = new TH2F("PtCamparisonHist","",30,0,300,30,0,300); //bins, xmin, xmax, bins, ymin, ymax
+   PtComparisonHist->GetXaxis()->SetTitle("EMTF P_{T} [GeV/c]");
+   PtComparisonHist->GetYaxis()->SetTitle("CSCTF P_{T} [GeV/c]");
+   PtComparisonHist->Sumw2();
 
    ////////////////////////////////////////////////////////////////////
    // Fill Histograms--------------------------------------------------
@@ -97,9 +109,31 @@ SampleHistos::SampleHistos(Sample* sample, Cuts* cut, TString cutName)
 	        // Fill Histograms
 	    	CSCTFtrackPtHist->Fill(sample->vars.csctf_trkPt->at(j));
 	    	CSCTFtrackEtaHist->Fill(sample->vars.csctf_trkEta->at(j));
-	    	//CSCTFtrackModeHist->Fill();
+	    	CSCTFtrackModeHist->Fill(sample->vars.csctf_trkMode->at(j));
             }
 	}
+	
+	// Fill matched Histograms
+	for(unsigned j=0; j<cut->EMisMatched[i].size(); j++)
+	{
+	    // Find matched tracks
+	    if(cut->EMisMatched[i][j] == true)
+	    {
+		sample->getEntry(i);
+		
+		// Find the corresponding CSC track
+		for(unsigned k=0; k < sample->vars.csctf_trkPt->size(); k++)
+		{
+		     cut->DeltaR(j,k);
+		     if(cut->deltaR <= 0.2){
+			// Fill Histograms
+			ModeComparisonHist->Fill(sample->vars.trkMode->at(j), sample->vars.csctf_trkMode->at(k));
+			PtComparisonHist->Fill(sample->vars.trkPt->at(j),sample->vars.csctf_trkPt->at(k)); // xvariable, yvariable
+		     }
+		}
+	     }
+	}
+
    }
   
    /////////////////////////////////////////////////////////////////////
@@ -111,7 +145,11 @@ SampleHistos::SampleHistos(Sample* sample, Cuts* cut, TString cutName)
    EMTFtrackEtaHist->Write();
    CSCTFtrackEtaHist->Write();
    EMTFtrackModeHist->Write();
-   //CSCTFtrackModeHist->Write();
+   CSCTFtrackModeHist->Write();
+   //ModeComparisonHist->Draw("COL same");
+   ModeComparisonHist->Write();
+   //PtComparisonHist->Draw("COL same");
+   PtComparisonHist->Write();
    file->Close();
 }
 
