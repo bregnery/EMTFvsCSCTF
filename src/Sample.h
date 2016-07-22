@@ -39,10 +39,12 @@ class Sample
         int getEntry(int i);                    // load the ith event from the ttree into vars
         int getEntry(int i, TEntryList* list);  // load ith event from the list into vars
                                                 // the ith event in the list maps to the jth tree entry
+        //std::vector<float> trackNumDiff;
 
         void setBranchAddresses(); // link the values in the tree to vars
 	//void addBranch(float newVar, TString newVarName, TBranch* newVarBranch); // Adds a branch with a leaf containing a floating point variable 
 	//void getOutFile();
+	void setAdditionalVariables();
 
     protected:
         TFile* file;           // the file with the ttree

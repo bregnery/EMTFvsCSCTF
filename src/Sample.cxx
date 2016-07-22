@@ -42,6 +42,7 @@ Sample::Sample(TString infilename, TString iname, TString insampleType)
     lumi = -999;
     
     setBranchAddresses();
+    //setAdditionalVariables();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,6 +75,17 @@ void Sample::setBranchAddresses()
     tree->SetBranchAddress("leg_trkMode", &vars.csctf_trkMode);
     tree->SetBranchAddress("trkPhi", &vars.trkPhi);
     tree->SetBranchAddress("leg_trkPhi", &vars.csctf_trkPhi);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//-----------------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////
+
+void Sample::setAdditionalVariables()
+{
+    for(unsigned i=0; i<nEvents; i++){
+	getEntry(i);
+    }
 }
 
 /*

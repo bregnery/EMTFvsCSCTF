@@ -74,6 +74,11 @@ SampleHistos::SampleHistos(Sample* sample, Cuts* cut, TString cutName)
    PtComparisonHist->GetYaxis()->SetTitle("CSCTF P_{T} [GeV/c]");
    PtComparisonHist->Sumw2();
 
+   // The difference in the number of tracks for EMTF and CSCTF
+   TH1F* trackNumDiffHist = new TH1F("trackNumDiffHist","",10,0,10);
+   setHistTitles(trackNumDiffHist, "Number of Tracks", "Events");
+   trackNumDiffHist->Sumw2();
+
    ////////////////////////////////////////////////////////////////////
    // Fill Histograms--------------------------------------------------
    ////////////////////////////////////////////////////////////////////
@@ -84,6 +89,12 @@ SampleHistos::SampleHistos(Sample* sample, Cuts* cut, TString cutName)
    for(unsigned i=0; i<sample->nEvents; i++)
    {
 	if(i % reportEach == 0) std::cout << "Event: " << i << std::endl;
+
+	// Fill plots that don't depend on matching
+	sample->getEntry(i);
+	if(getTrackNumDiff(sample->vars.trkPt->size(), sample->vars.csctf_trkPt->size()) < 100) {
+	     trackNumDiffHist->Fill(getTrackNumDiff(sample->vars.trkPt->size(), sample->vars.csctf_trkPt->size()));
+	}
 
 	// Fill not matched EMTF tracks
 	for(unsigned j=0; j<cut->EMisMatched[i].size(); j++)
@@ -146,10 +157,9 @@ SampleHistos::SampleHistos(Sample* sample, Cuts* cut, TString cutName)
    CSCTFtrackEtaHist->Write();
    EMTFtrackModeHist->Write();
    CSCTFtrackModeHist->Write();
-   //ModeComparisonHist->Draw("COL same");
    ModeComparisonHist->Write();
-   //PtComparisonHist->Draw("COL same");
    PtComparisonHist->Write();
+   trackNumDiffHist->Write();
    file->Close();
 }
 
@@ -162,3 +172,24 @@ void SampleHistos::setHistTitles(TH1F* hist, TString xtitle, TString ytitle)
   hist->GetXaxis()->SetTitle(xtitle);
   hist->GetYaxis()->SetTitle(ytitle);
 }
+
+//////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------//
+//////////////////////////////////////////////////////////////////
+
+float SampleHistos::getTrackNumDiff(std::size_t emTracks, std::size_t cscTracks)
+{
+  
+	// Calculate the difference in the number of tracks per event between CSCTF and EMTF
+	float trackNumDiff = 0;
+	trackNumDiff = std::abs(std::abs(emTracks) - std::abs(cscTracks) ); // fabs is an absolute value for floats
+	
+	// Debugging
+	//std::cout << "Difference of Number of tracks: " << trackNumDiff << std::endl;
+	//if(trackNumDiff > 100){
+	//   std::cout << "EMTF tracks: " << emTracks << " CSCTF tracks: " << cscTracks << std::endl;
+	//}
+	
+	return trackNumDiff;
+}
+

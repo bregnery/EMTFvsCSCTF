@@ -20,6 +20,7 @@ class SampleHistos
 	SampleHistos(Sample* sample, Cuts* cut, TString cutName);
 
 	void setHistTitles(TH1F* hist, TString xtitle, TString ytitle);
+	float getTrackNumDiff(std::size_t emTracks, std::size_t cscTracks);
 
    protected:
 	TFile* file;  // output file with histograms
