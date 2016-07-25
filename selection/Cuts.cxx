@@ -44,6 +44,8 @@ void Cuts::Matched(int i)
    // Create a temp vector to pass to the real vector
    std::vector<bool> EMtemp;
    std::vector<bool> CSCtemp;
+   std::vector<bool> recoEMtemp;
+   std::vector<bool> recoCSCtemp;
 
    sample->getEntry(i);
 
@@ -101,6 +103,48 @@ void Cuts::Matched(int i)
    }  
    CSCisMatched.push_back(CSCtemp);
 
+   // Loop over EMTF tracks in the event and see if they match reco tracks
+   for(unsigned j=0; j < sample->vars.trkPt->size(); j++)
+   {
+	// Sets the j entry equal to false
+	// But changes it to true if there is reco track such that deltaR <= 0.2
+        recoEMtemp.push_back(false);   
+	for(unsigned k=0; k < sample->vars.recoPt->size(); k++)
+        {
+             recoEMDeltaR(j,k); //important to make j and k are switched here
+             if(deltaR <= 0.2){
+                 recoEMtemp[j]=true;
+		 break;
+             }
+        }
+
+	//Debugging
+	//if(recoEMtemp[j] == false){
+	   //std::cout << "Event: " << i << " has an unmatched reco Track." << std::endl;
+	//}
+	
+   }  
+   recoEMisMatched.push_back(recoEMtemp);
+
+
+   // Loop over CSCTF tracks in the event and see if they match reco tracks
+   for(unsigned j=0; j < sample->vars.csctf_trkPt->size(); j++)
+   {
+	// Sets the j entry equal to false
+	// But changes it to true if there is reco track such that deltaR <= 0.2
+        recoCSCtemp.push_back(false);   
+	for(unsigned k=0; k < sample->vars.recoPt->size(); k++)
+        {
+             recoCSCDeltaR(j,k); //important to make j and k are switched here
+             if(deltaR <= 0.2){
+                 recoCSCtemp[j]=true;
+		 break;
+             }
+        }
+	
+   }  
+   recoCSCisMatched.push_back(recoCSCtemp);
+
 }
 
 ///////////////////////////////////////////////////////////////
@@ -113,5 +157,31 @@ void Cuts::DeltaR(unsigned j, unsigned k)
 
    float deltaPhi = sample->vars.csctf_trkPhi->at(k) - sample->vars.trkPhi->at(j);
    float deltaEta = sample->vars.csctf_trkEta->at(k) -  sample->vars.trkEta->at(j); 
+   deltaR = TMath::Sqrt(deltaPhi*deltaPhi + deltaEta*deltaEta);
+}
+
+///////////////////////////////////////////////////////////////
+//-----------------------------------------------------------//
+///////////////////////////////////////////////////////////////
+
+void Cuts::recoEMDeltaR(unsigned j, unsigned k)
+{
+// Calculates Delta R
+
+   float deltaPhi = sample->vars.recoPhi->at(k) - sample->vars.trkPhi->at(j);
+   float deltaEta = sample->vars.recoEta->at(k) -  sample->vars.trkEta->at(j); 
+   deltaR = TMath::Sqrt(deltaPhi*deltaPhi + deltaEta*deltaEta);
+}
+
+///////////////////////////////////////////////////////////////
+//-----------------------------------------------------------//
+///////////////////////////////////////////////////////////////
+
+void Cuts::recoCSCDeltaR(unsigned j, unsigned k)
+{
+// Calculates Delta R
+
+   float deltaPhi = sample->vars.csctf_trkPhi->at(j) - sample->vars.recoPhi->at(k);
+   float deltaEta = sample->vars.csctf_trkEta->at(j) -  sample->vars.recoEta->at(k); 
    deltaR = TMath::Sqrt(deltaPhi*deltaPhi + deltaEta*deltaEta);
 }

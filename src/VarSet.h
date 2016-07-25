@@ -18,7 +18,7 @@ class VarSet
         std::vector<float> *recoPt, *trkPt, *csctf_trkPt;
 	std::vector<float> *recoEta, *trkEta, *csctf_trkEta;
 	std::vector<float> *trkMode, *csctf_trkMode;
-	std::vector<float> *trkPhi, *csctf_trkPhi;
+	std::vector<float> *trkPhi, *csctf_trkPhi, *recoPhi;
 };
 
 #endif

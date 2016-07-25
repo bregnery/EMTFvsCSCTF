@@ -75,6 +75,7 @@ void Sample::setBranchAddresses()
     tree->SetBranchAddress("leg_trkMode", &vars.csctf_trkMode);
     tree->SetBranchAddress("trkPhi", &vars.trkPhi);
     tree->SetBranchAddress("leg_trkPhi", &vars.csctf_trkPhi);
+    tree->SetBranchAddress("recoPhi", &vars.recoPhi);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

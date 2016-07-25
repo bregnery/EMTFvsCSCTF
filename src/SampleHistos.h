@@ -19,8 +19,12 @@ class SampleHistos
 	SampleHistos();
 	SampleHistos(Sample* sample, Cuts* cut, TString cutName);
 
+	Sample* sample;
+
 	void setHistTitles(TH1F* hist, TString xtitle, TString ytitle);
 	float getTrackNumDiff(std::size_t emTracks, std::size_t cscTracks);
+	float getEMPtResolution(unsigned j, unsigned k);
+	float getCSCPtResolution(unsigned j, unsigned k);
 
    protected:
 	TFile* file;  // output file with histograms
