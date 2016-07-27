@@ -1,7 +1,7 @@
 // SampleHistos.h
 
-#ifndef PLOTS
-#define PLOTS
+#ifndef HISTOS
+#define HISTOS
 
 #include <vector>
 #include <iostream>
@@ -20,6 +20,8 @@ class SampleHistos
 	SampleHistos(Sample* sample, Cuts* cut, TString cutName);
 
 	Sample* sample;
+	std::vector<std::vector<TH1F*> > histo1D;
+	std::vector<TH2F*> histo2D;
 
 	void setHistTitles(TH1F* hist, TString xtitle, TString ytitle);
 	float getTrackNumDiff(std::size_t emTracks, std::size_t cscTracks);

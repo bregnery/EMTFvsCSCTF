@@ -34,77 +34,81 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    // Histograms------------------------------------------------------
    ///////////////////////////////////////////////////////////////////
 
-   // Pt for unmatched EMTF tracks
-   TH1F* EMTFtrackPtHist = new TH1F("EMTFtrackPtHist","",30,0,350);
-   setHistTitles(EMTFtrackPtHist,"P_{T} [GeV/c]","Events");
-   EMTFtrackPtHist->SetStats(1);
-   EMTFtrackPtHist->Sumw2();
+   // The track type
+   std::vector<TString> trackType;
+   trackType.push_back("EMTFtrack");
+   trackType.push_back("matchEMTFtrack");
+   trackType.push_back("CSCTFtrack");
+   trackType.push_back("matchCSCTFtrack");
 
-   // Pt for matched EMTF tracks
-   TH1F* matchEMTFtrackPtHist = new TH1F("matchEMTFtrackPtHist","",30,0,350);
-   setHistTitles(matchEMTFtrackPtHist,"P_{T} [GeV/c]","Events");
-   matchEMTFtrackPtHist->SetStats(1);
-   matchEMTFtrackPtHist->Sumw2();
+   // The resolution type 
+   std::vector<TString> resolutionType;
+   resolutionType.push_back("recoEM");
+   resolutionType.push_back("recoCSC");
+   resolutionType.push_back("recoEMPtDiff");
+   resolutionType.push_back("recoCSCPtDiff");
 
-   // Pt for unmatched CSCTF tracks
-   TH1F* CSCTFtrackPtHist = new TH1F("CSCTFtrackPtHist","",30,0,350);
-   setHistTitles(CSCTFtrackPtHist,"P_{T} [GeV/c]","Events");
-   CSCTFtrackPtHist->SetStats(1);
-   CSCTFtrackPtHist->Sumw2();
+   // The plots with number of tracks
+   std::vector<TString> numType;
+   numType.push_back("Diff");
 
-   // Pt for matched CSCTF tracks
-   TH1F* matchCSCTFtrackPtHist = new TH1F("matchCSCTFtrackPtHist","",30,0,350);
-   setHistTitles(matchCSCTFtrackPtHist,"P_{T} [GeV/c]","Events");
-   matchCSCTFtrackPtHist->SetStats(1);
-   matchCSCTFtrackPtHist->Sumw2();
+   // Histogram vectors
+   std::vector<TH1F*> histoPtVec;
+   std::vector<TH1F*> histoEtaVec;
+   std::vector<TH1F*> histoModeVec;
+   std::vector<TH1F*> histoResoVec;
+   std::vector<TH1F*> histoNumVec;
 
-   // Eta for unmatched EMTF tracks
-   TH1F* EMTFtrackEtaHist = new TH1F("EMTFtrackEtaHist","",20,0,6);
-   setHistTitles(EMTFtrackEtaHist,"#eta","Events");
-   EMTFtrackEtaHist->SetStats(1);
-   EMTFtrackEtaHist->Sumw2();
+   // Set Histogram Parameters
+   int index = 0;
+   for(std::vector<TString>::const_iterator itr = trackType.begin(); itr != trackType.end(); itr++){
 
-   // Eta for matched EMTF tracks
-   TH1F* matchEMTFtrackEtaHist = new TH1F("matchEMTFtrackEtaHist","",20,0,6);
-   setHistTitles(matchEMTFtrackEtaHist,"#eta","Events");
-   matchEMTFtrackEtaHist->SetStats(1);
-   matchEMTFtrackEtaHist->Sumw2();
+	// track Pt
+   	histoPtVec.push_back(new TH1F(*itr + "PtHist","",30,0,350) );
+   	setHistTitles(histoPtVec[index],"P_{T} [GeV/c]","Events");
+   	histoPtVec[index]->SetStats(1);
+   	histoPtVec[index]->Sumw2();
 
-   // Eta for unmatched CSCTF tracks
-   TH1F* CSCTFtrackEtaHist = new TH1F("CSCTFtrackEtaHist","",20,0,6);
-   setHistTitles(CSCTFtrackEtaHist,"#eta","Events");
-   CSCTFtrackEtaHist->SetStats(1);
-   CSCTFtrackEtaHist->Sumw2();
+	// track Eta
+	histoEtaVec.push_back(new TH1F(*itr + "EtaHist","",20,0,6) );
+   	setHistTitles(histoEtaVec[index],"#eta","Events");
+   	histoEtaVec[index]->SetStats(1);
+   	histoEtaVec[index]->Sumw2();
 
-   // Eta for matched CSCTF tracks
-   TH1F* matchCSCTFtrackEtaHist = new TH1F("matchCSCTFtrackEtaHist","",20,0,6);
-   setHistTitles(matchCSCTFtrackEtaHist,"#eta","Events");
-   matchCSCTFtrackEtaHist->SetStats(1);
-   matchCSCTFtrackEtaHist->Sumw2();
+	// track Mode
+   	histoModeVec.push_back(new TH1F(*itr + "ModeHist","",30,0,30) );
+   	setHistTitles(histoModeVec[index],"Mode","Events");
+   	histoModeVec[index]->SetStats(1);
+   	histoModeVec[index]->Sumw2();
 
-   // Mode for unmatched EMTF tracks
-   TH1F* EMTFtrackModeHist = new TH1F("EMTFtrackModeHist","",30,0,30);
-   setHistTitles(EMTFtrackModeHist,"Mode","Events");
-   EMTFtrackModeHist->SetStats(1);
-   EMTFtrackModeHist->Sumw2();
+	index++;
+   }
 
-   // Mode for matched EMTF tracks
-   TH1F* matchEMTFtrackModeHist = new TH1F("matchEMTFtrackModeHist","",30,0,30);
-   setHistTitles(matchEMTFtrackModeHist,"Mode","Events");
-   matchEMTFtrackModeHist->SetStats(1);
-   matchEMTFtrackModeHist->Sumw2();
+   index = 0;
 
-   // Mode for unmatched CSCTF tracks
-   TH1F* CSCTFtrackModeHist = new TH1F("CSCTFtrackModeHist","",30,0,30);
-   setHistTitles(CSCTFtrackModeHist,"Mode","Events");
-   CSCTFtrackModeHist->SetStats(1);
-   CSCTFtrackModeHist->Sumw2();
+   for(std::vector<TString>::const_iterator itr = resolutionType.begin(); itr != resolutionType.end(); itr++){
 
-   // Mode for matched CSCTF tracks
-   TH1F* matchCSCTFtrackModeHist = new TH1F("matchCSCTFtrackModeHist","",30,0,30);
-   setHistTitles(matchCSCTFtrackModeHist,"Mode","Events");
-   matchCSCTFtrackModeHist->SetStats(1);
-   matchCSCTFtrackModeHist->Sumw2();
+	// Pt Resolution
+	histoResoVec.push_back(new TH1F(*itr + "resoHist","",40,-20,20) );
+   	setHistTitles(histoResoVec[index], "P_{T} Resolution","Events");
+   	histoResoVec[index]->SetStats(1);
+   	histoResoVec[index]->Sumw2();
+
+	index++;
+   }
+
+   index = 0;
+
+   for(std::vector<TString>::const_iterator itr = numType.begin(); itr != numType.end(); itr++){
+
+	// number of tracks
+	histoNumVec.push_back(new TH1F(*itr + "NumTrackHist","",10,0,10) );
+   	setHistTitles(histoNumVec[index], "Number of Tracks", "Events");
+   	histoNumVec[index]->SetStats(1);
+   	histoNumVec[index]->Sumw2();
+	
+	index++;
+   }
 
    // CSCTF mode vs. EMTF mode for matched tracks
    TH2F* ModeComparisonHist = new TH2F("ModeComparisonHist","",20,0,20,20,0,20); //bins, xmin, xmax, bins, ymin, ymax
@@ -117,24 +121,6 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    PtComparisonHist->GetXaxis()->SetTitle("EMTF P_{T} [GeV/c]");
    PtComparisonHist->GetYaxis()->SetTitle("CSCTF P_{T} [GeV/c]");
    PtComparisonHist->Sumw2();
-
-   // The difference in the number of tracks for EMTF and CSCTF
-   TH1F* trackNumDiffHist = new TH1F("trackNumDiffHist","",10,0,10);
-   setHistTitles(trackNumDiffHist, "Number of Tracks", "Events");
-   trackNumDiffHist->SetStats(1);
-   trackNumDiffHist->Sumw2();
-
-   // Pt resolution for the EMTF
-   TH1F* recoEMresoHist = new TH1F("recoEMresoHist","",40,-20,20);
-   setHistTitles(recoEMresoHist, "P_{T} Resolution","Events");
-   recoEMresoHist->SetStats(1);
-   recoEMresoHist->Sumw2();
-
-   // Pt resolution for the CSCTF
-   TH1F* recoCSCresoHist = new TH1F("recoCSCresoHist","",40,-20,20);
-   setHistTitles(recoCSCresoHist, "P_{T} Resolution","Events");
-   recoCSCresoHist->SetStats(1);
-   recoCSCresoHist->Sumw2();
 
    ////////////////////////////////////////////////////////////////////
    // Fill Histograms--------------------------------------------------
@@ -150,7 +136,7 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 	// Fill plots that don't depend on matching
 	sample->getEntry(i);
 	if(getTrackNumDiff(sample->vars.trkPt->size(), sample->vars.csctf_trkPt->size()) < 100) {
-	     trackNumDiffHist->Fill(getTrackNumDiff(sample->vars.trkPt->size(), sample->vars.csctf_trkPt->size()));
+	     histoNumVec[0]->Fill(getTrackNumDiff(sample->vars.trkPt->size(), sample->vars.csctf_trkPt->size()));
 	}
 
 	// Fill not matched EMTF tracks
@@ -161,9 +147,9 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 	   {
 	        sample->getEntry(i);
 	        // Fill Histograms
-	    	EMTFtrackPtHist->Fill(sample->vars.trkPt->at(j));
-	    	EMTFtrackEtaHist->Fill(sample->vars.trkEta->at(j));
-	    	EMTFtrackModeHist->Fill(sample->vars.trkMode->at(j));
+	    	histoPtVec[0]->Fill(sample->vars.trkPt->at(j));
+	    	histoEtaVec[0]->Fill(sample->vars.trkEta->at(j));
+	    	histoModeVec[0]->Fill(sample->vars.trkMode->at(j));
             }
 	}
 
@@ -175,9 +161,9 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 	   {
 	        sample->getEntry(i);
 	        // Fill Histograms
-	    	matchEMTFtrackPtHist->Fill(sample->vars.trkPt->at(j));
-	    	matchEMTFtrackEtaHist->Fill(sample->vars.trkEta->at(j));
-	    	matchEMTFtrackModeHist->Fill(sample->vars.trkMode->at(j));
+	    	histoPtVec[1]->Fill(sample->vars.trkPt->at(j));
+	    	histoEtaVec[1]->Fill(sample->vars.trkEta->at(j));
+	    	histoModeVec[1]->Fill(sample->vars.trkMode->at(j));
             }
 	}
 
@@ -189,9 +175,9 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 	   {
 	        sample->getEntry(i);
 	        // Fill Histograms
-	    	CSCTFtrackPtHist->Fill(sample->vars.csctf_trkPt->at(j));
-	    	CSCTFtrackEtaHist->Fill(sample->vars.csctf_trkEta->at(j));
-	    	CSCTFtrackModeHist->Fill(sample->vars.csctf_trkMode->at(j));
+	    	histoPtVec[2]->Fill(sample->vars.csctf_trkPt->at(j));
+	    	histoEtaVec[2]->Fill(sample->vars.csctf_trkEta->at(j));
+	    	histoModeVec[2]->Fill(sample->vars.csctf_trkMode->at(j));
             }
 	}
 
@@ -203,9 +189,9 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 	   {
 	        sample->getEntry(i);
 	        // Fill Histograms
-	    	matchCSCTFtrackPtHist->Fill(sample->vars.csctf_trkPt->at(j));
-	    	matchCSCTFtrackEtaHist->Fill(sample->vars.csctf_trkEta->at(j));
-	    	matchCSCTFtrackModeHist->Fill(sample->vars.csctf_trkMode->at(j));
+	    	histoPtVec[3]->Fill(sample->vars.csctf_trkPt->at(j));
+	    	histoEtaVec[3]->Fill(sample->vars.csctf_trkEta->at(j));
+	    	histoModeVec[3]->Fill(sample->vars.csctf_trkMode->at(j));
             }
 	}
 	
@@ -244,7 +230,8 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 		     cut->recoEMDeltaR(j,k);
 		     if(cut->deltaR <= 0.2){
 			// Fill Histograms
-			recoEMresoHist->Fill(getEMPtResolution(j,k) );
+			histoResoVec[0]->Fill(getEMPtResolution(j,k) );
+			histoResoVec[2]->Fill(sample->vars.trkPt->at(j) - sample->vars.recoPt->at(k));
 		     }
 		}
 	     }
@@ -264,7 +251,8 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 		     cut->recoCSCDeltaR(j,k);
 		     if(cut->deltaR <= 0.2){
 			// Fill Histograms
-			recoCSCresoHist->Fill(getCSCPtResolution(j,k) );
+			histoResoVec[1]->Fill(getCSCPtResolution(j,k) );
+			histoResoVec[3]->Fill(sample->vars.csctf_trkPt->at(j) - sample->vars.recoPt->at(k));
 		     }
 		}
 	     }
@@ -272,32 +260,33 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 
 
    }
-  
+ 
+   /////////////////////////////////////////////////////////////////////
+   // Save Class Vectors------------------------------------------------
+   /////////////////////////////////////////////////////////////////////
+
+   histo1D.push_back(histoPtVec);
+   histo1D.push_back(histoEtaVec);
+   histo1D.push_back(histoModeVec);
+   histo1D.push_back(histoNumVec);
+   histo1D.push_back(histoResoVec);
+
+   histo2D.push_back(ModeComparisonHist);
+   histo2D.push_back(PtComparisonHist);
+ 
    /////////////////////////////////////////////////////////////////////
    // Write Histograms--------------------------------------------------
    /////////////////////////////////////////////////////////////////////
+   
+   for(std::vector<std::vector<TH1F*> >::const_iterator itr = histo1D.begin(); itr != histo1D.end(); itr++){
+	for(std::vector<TH1F*>::const_iterator j = (*itr).begin(); j != (*itr).end(); j++){
+	    (*j)->Write();
+	}
+   }
 
-   EMTFtrackPtHist->Write();
-   CSCTFtrackPtHist->Write();
-   EMTFtrackEtaHist->Write();
-   CSCTFtrackEtaHist->Write();
-   EMTFtrackModeHist->Write();
-   CSCTFtrackModeHist->Write();
-
-   matchEMTFtrackPtHist->Write();
-   matchCSCTFtrackPtHist->Write();
-   matchEMTFtrackEtaHist->Write();
-   matchCSCTFtrackEtaHist->Write();
-   matchEMTFtrackModeHist->Write();
-   matchCSCTFtrackModeHist->Write();
-
-   ModeComparisonHist->Write();
-   PtComparisonHist->Write();
-
-   trackNumDiffHist->Write();
-
-   recoEMresoHist->Write();
-   recoCSCresoHist->Write();
+   for(std::vector<TH2F*>::const_iterator itr = histo2D.begin(); itr != histo2D.end(); itr++){
+	(*itr)->Write();
+   }
 
    file->Close();
 }
