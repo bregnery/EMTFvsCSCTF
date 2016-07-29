@@ -18,6 +18,7 @@
 #include "TFrame.h"
 #include "TGraphErrors.h"
 #include "TStyle.h"
+#include "TROOT.h"
 
 class Plots
 {

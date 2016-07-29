@@ -27,10 +27,14 @@ Plots::Plots(Sample* insample, Cuts* cut, SampleHistos* inhistos, TString cutNam
    histos = inhistos;
 
    /////////////////////////////////////////////////////////////////////
-   // Create necessary canvas variables---------------------------------
+   // Create necessary canvas variables and set root parameters---------
    /////////////////////////////////////////////////////////////////////
 
    int index = 0;
+   double width = 1000;
+   double height = 1000;
+
+   gROOT->SetBatch();
 
    /////////////////////////////////////////////////////////////////////
    // Create Plots------------------------------------------------------
@@ -39,8 +43,10 @@ Plots::Plots(Sample* insample, Cuts* cut, SampleHistos* inhistos, TString cutNam
    for(std::vector<std::vector<TH1F*> >::const_iterator itr = histos->histo1D.begin(); itr != histos->histo1D.end(); itr++){
       	for(std::vector<TH1F*>::const_iterator j = (*itr).begin(); j != (*itr).end(); j++){
 
-	    // Save Canvas vector
-  	    canvas.push_back(new TCanvas() );
+	    TString histoVarName((*j)->GetName());
+
+	    // Create Canvas
+  	    TCanvas* canvasTemp = new TCanvas("c" + histoVarName, "c" + histoVarName, width, height);
 	    
 	    // Set Histogram filling parameters
 	    (*j)->SetFillColor(kOrange);
@@ -50,9 +56,12 @@ Plots::Plots(Sample* insample, Cuts* cut, SampleHistos* inhistos, TString cutNam
 	    (*j)->GetYaxis()->SetTitleOffset(1.7);
 	    (*j)->Draw("hist same");
 	
-	    TString histoVarName((*j)->GetName());
+	    canvasTemp->SaveAs("Hist_" + histoVarName + ".png");
+	
+	    // Save Canvas Vector
+	    canvas.push_back(canvasTemp);
 
-	    canvas[index]->SaveAs("Hist_" + histoVarName + ".png");
+	    index++;
      	}
 	
    }

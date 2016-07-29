@@ -41,6 +41,12 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    trackType.push_back("CSCTFtrack");
    trackType.push_back("matchCSCTFtrack");
 
+   std::vector<TString> trackTypeTitle;
+   trackTypeTitle.push_back("Unmatched EMTF track ");
+   trackTypeTitle.push_back("Matched EMTF track ");
+   trackTypeTitle.push_back("Unmatched CSCTF track ");
+   trackTypeTitle.push_back("Matched CSCTF track ");
+
    // The resolution type 
    std::vector<TString> resolutionType;
    resolutionType.push_back("recoEM");
@@ -62,19 +68,19 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    for(std::vector<TString>::const_iterator itr = trackType.begin(); itr != trackType.end(); itr++){
 
 	// track Pt
-   	histoPtVec.push_back(new TH1F(*itr + "PtHist","",30,0,350) );
+   	histoPtVec.push_back(new TH1F(*itr + "PtHist",trackTypeTitle[index] + "P_{T}",30,0,350) );
    	setHistTitles(histoPtVec[index],"P_{T} [GeV/c]","Events");
    	histoPtVec[index]->SetStats(1);
    	histoPtVec[index]->Sumw2();
 
 	// track Eta
-	histoEtaVec.push_back(new TH1F(*itr + "EtaHist","",20,0,6) );
+	histoEtaVec.push_back(new TH1F(*itr + "EtaHist",trackTypeTitle[index] + "#eta",20,0,6) );
    	setHistTitles(histoEtaVec[index],"#eta","Events");
    	histoEtaVec[index]->SetStats(1);
    	histoEtaVec[index]->Sumw2();
 
 	// track Mode
-   	histoModeVec.push_back(new TH1F(*itr + "ModeHist","",30,0,30) );
+   	histoModeVec.push_back(new TH1F(*itr + "ModeHist",trackTypeTitle[index] + "Mode",30,0,30) );
    	setHistTitles(histoModeVec[index],"Mode","Events");
    	histoModeVec[index]->SetStats(1);
    	histoModeVec[index]->Sumw2();
