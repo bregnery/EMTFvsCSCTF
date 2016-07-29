@@ -34,7 +34,8 @@ Plots::Plots(Sample* insample, Cuts* cut, SampleHistos* inhistos, TString cutNam
    double width = 1000;
    double height = 1000;
 
-   gROOT->SetBatch();
+   gStyle->SetPadLeftMargin(0.15);
+   //gROOT->SetBatch();
 
    /////////////////////////////////////////////////////////////////////
    // Create Plots------------------------------------------------------
@@ -50,10 +51,10 @@ Plots::Plots(Sample* insample, Cuts* cut, SampleHistos* inhistos, TString cutNam
 	    
 	    // Set Histogram filling parameters
 	    (*j)->SetFillColor(kOrange);
-	    (*j)->SetLineColor(kOrange);
+	    (*j)->SetLineColor(kOrange+7);
 	    (*j)->SetMarkerStyle(0);
 	    (*j)->SetFillStyle(1);
-	    (*j)->GetYaxis()->SetTitleOffset(1.7);
+	    (*j)->GetYaxis()->SetTitleOffset(2.0);
 	    (*j)->Draw("hist same");
 	
 	    canvasTemp->SaveAs("Hist_" + histoVarName + ".png");

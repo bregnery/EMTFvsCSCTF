@@ -52,9 +52,16 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    resolutionType.push_back("recoEM");
    resolutionType.push_back("recoCSC");
 
+   std::vector<TString> resolutionTitle;
+   resolutionTitle.push_back(" Resolution for EMTF");
+   resolutionTitle.push_back(" Resolution for CSCTF");
+
    // The plots with number of tracks
    std::vector<TString> numType;
    numType.push_back("Diff");
+
+   std::vector<TString> numTitle;
+   numTitle.push_back("Difference in ");
 
    // Histogram vectors
    std::vector<TH1F*> histoPtVec;
@@ -89,15 +96,54 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    }
 
    index = 0;
+   int histoIndex = 0;
+   int numResoHist = 0;
 
    for(std::vector<TString>::const_iterator itr = resolutionType.begin(); itr != resolutionType.end(); itr++){
 
-	// Pt Resolution
-	histoResoVec.push_back(new TH1F(*itr + "resoHist","",13,-2,10) );
-   	setHistTitles(histoResoVec[index], "P_{T} Resolution","Events");
-   	histoResoVec[index]->SetStats(1);
-   	histoResoVec[index]->Sumw2();
+	// Find starting index for CSC resolution
+	if( (*itr) == "recoCSC"){
+		numResoHist = histoIndex;
+	}	
 
+	// Pt Resolution
+	histoResoVec.push_back(new TH1F(*itr + "resoHist","P_{T}" + resolutionTitle[index],13,-2,10) );
+   	setHistTitles(histoResoVec[index], "P_{T} Resolution","Events");
+   	histoResoVec[histoIndex]->SetStats(1);
+   	histoResoVec[histoIndex]->Sumw2();
+
+	histoIndex++;
+
+	// Loop over mode values
+	for(int mode = 1; mode < 17; mode++){
+
+		// Create string from mode
+		TString modeStr = std::to_string(mode);
+
+		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt10resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with P_{T} < 10", 13,-2,10) );
+   		histoResoVec[histoIndex]->SetStats(1);
+   		histoResoVec[histoIndex]->Sumw2();
+
+		histoIndex++;
+
+		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt10_30resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with 10 < P_{T} < 30", 13,-2,10) );
+   		histoResoVec[histoIndex]->SetStats(1);
+   		histoResoVec[histoIndex]->Sumw2();
+
+		histoIndex++;
+				
+		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt30_100resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with 30 < P_{T} < 1000", 13,-2,10) );
+   		histoResoVec[histoIndex]->SetStats(1);
+   		histoResoVec[histoIndex]->Sumw2();
+
+		histoIndex++;
+
+		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt100resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with P_{T} > 100", 13,-2,10) );
+   		histoResoVec[histoIndex]->SetStats(1);
+   		histoResoVec[histoIndex]->Sumw2();
+
+		histoIndex++;
+	}
 	index++;
    }
 
@@ -106,7 +152,7 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    for(std::vector<TString>::const_iterator itr = numType.begin(); itr != numType.end(); itr++){
 
 	// number of tracks
-	histoNumVec.push_back(new TH1F(*itr + "NumTrackHist","",10,0,10) );
+	histoNumVec.push_back(new TH1F(*itr + "NumTrackHist",numTitle[index] + "the Number of Tracks",10,0,10) );
    	setHistTitles(histoNumVec[index], "Number of Tracks", "Events");
    	histoNumVec[index]->SetStats(1);
    	histoNumVec[index]->Sumw2();
@@ -234,7 +280,34 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 		     cut->recoEMDeltaR(j,k);
 		     if(cut->deltaR <= 0.2){
 			// Fill Histograms
-			histoResoVec[0]->Fill(getEMPtResolution(j,k) );
+
+			histoIndex = 0; //Incredibly important index, often could cause seg faults			
+
+			histoResoVec[histoIndex]->Fill(getEMPtResolution(j,k) );
+
+			histoIndex++;
+
+			for(int mode = 1; mode < 17; mode++){
+			     if(sample->vars.trkMode->at(j) = mode && sample->vars.trkPt->at(j) < 10){
+				 histoResoVec[histoIndex]->Fill(getEMPtResolution(j,k));
+			     }
+			     histoIndex++;
+
+			     if(sample->vars.trkMode->at(j) = mode && sample->vars.trkPt->at(j) < 30 && sample->vars.trkPt->at(j) > 10){
+				 histoResoVec[histoIndex]->Fill(getEMPtResolution(j,k));
+			     }
+			     histoIndex++;
+
+			     if(sample->vars.trkMode->at(j) = mode && sample->vars.trkPt->at(j) < 100 && sample->vars.trkPt->at(j) > 30){
+				 histoResoVec[histoIndex]->Fill(getEMPtResolution(j,k));
+			     }
+			     histoIndex++;
+
+			     if(sample->vars.trkMode->at(j) = mode && sample->vars.trkPt->at(j) > 100){
+				 histoResoVec[histoIndex]->Fill(getEMPtResolution(j,k));
+			     }
+			     histoIndex++;
+			}
 		     }
 		}
 	     }
@@ -254,7 +327,33 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 		     cut->recoCSCDeltaR(j,k);
 		     if(cut->deltaR <= 0.2){
 			// Fill Histograms
-			histoResoVec[1]->Fill(getCSCPtResolution(j,k) );
+			histoIndex = numResoHist; // incredibly important number to get right
+
+			histoResoVec[histoIndex]->Fill(getCSCPtResolution(j,k) );
+
+			histoIndex++;
+
+			for(int mode = 1; mode < 17; mode++){
+			     if(sample->vars.csctf_trkMode->at(j) = mode && sample->vars.csctf_trkPt->at(j) < 10){
+				 histoResoVec[histoIndex]->Fill(getCSCPtResolution(j,k));
+			     }
+			     histoIndex++;
+
+			     if(sample->vars.csctf_trkMode->at(j) = mode && sample->vars.csctf_trkPt->at(j) < 30 && sample->vars.csctf_trkPt->at(j) > 10){
+				 histoResoVec[histoIndex]->Fill(getCSCPtResolution(j,k));
+			     }
+			     histoIndex++;
+
+			     if(sample->vars.csctf_trkMode->at(j) = mode && sample->vars.csctf_trkPt->at(j) < 100 && sample->vars.csctf_trkPt->at(j) > 30){
+				 histoResoVec[histoIndex]->Fill(getCSCPtResolution(j,k));
+			     }
+			     histoIndex++;
+
+			     if(sample->vars.csctf_trkMode->at(j) = mode && sample->vars.csctf_trkPt->at(j) > 100){
+				 histoResoVec[histoIndex]->Fill(getCSCPtResolution(j,k));
+			     }
+			     histoIndex++;
+			}
 		     }
 		}
 	     }
