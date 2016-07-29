@@ -6,6 +6,8 @@
 #include <vector>
 #include <iostream>
 
+#include "tdrstyle.h"
+#include "CMS_lumi.cxx"
 #include "Sample.h"
 #include "SampleHistos.h"
 #include "../selection/Cuts.h"
@@ -13,11 +15,12 @@
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TString.h"
-#include "TCanvas.h"
+//#include "TPad.h"
+//#include "TCanvas.h"
 #include "TGraph.h"
 #include "TFrame.h"
 #include "TGraphErrors.h"
-#include "TStyle.h"
+//#include "TStyle.h"
 
 class Plots
 {
@@ -27,9 +30,8 @@ class Plots
 
 	Sample* sample;
 	SampleHistos* histos;
-	std::vector<TCanvas*> canvas;
 
-	void saveCanvas();
+	void createCanvas( int iPeriod, int iPos , TH1F* h);
 };
 
 #endif

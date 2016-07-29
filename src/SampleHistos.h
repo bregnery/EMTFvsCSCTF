@@ -24,6 +24,7 @@ class SampleHistos
 	std::vector<TH2F*> histo2D;
 
 	void setHistTitles(TH1F* hist, TString xtitle, TString ytitle);
+	void closeFile();
 	float getTrackNumDiff(std::size_t emTracks, std::size_t cscTracks);
 	float getEMPtResolution(unsigned j, unsigned k);
 	float getCSCPtResolution(unsigned j, unsigned k);

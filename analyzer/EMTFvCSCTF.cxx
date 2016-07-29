@@ -1,6 +1,7 @@
 #include "../src/Sample.h"
 #include "../selection/Cuts.h"
 #include "SampleHistos.h"
+#include "Plots.h"
 
 #include "TLorentzVector.h"
 
@@ -67,6 +68,19 @@ int main()
     
     std::cout << "=========== Creating Data Histogram file ===========" << std::endl;
     sampleHistos["Data"] = new SampleHistos(samples["Data"], cuts["Data"], "Comparison");
+
+    ///////////////////////////////////////////////////////////////////
+    // CMS style Plots-------------------------------------------------
+    ///////////////////////////////////////////////////////////////////    
+
+    std::cout << "=========== Creating CMS Style Plots ===============" << std::endl;
+    Plots *plots = new Plots(samples["Data"], cuts["Data"], sampleHistos["Data"], "Comparison");
+
+    ///////////////////////////////////////////////////////////////////
+    // Close TFiles----------------------------------------------------
+    ///////////////////////////////////////////////////////////////////
+
+    sampleHistos["Data"]->closeFile();
 
     return 0;
 }

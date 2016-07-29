@@ -45,8 +45,6 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    std::vector<TString> resolutionType;
    resolutionType.push_back("recoEM");
    resolutionType.push_back("recoCSC");
-   resolutionType.push_back("recoEMPtDiff");
-   resolutionType.push_back("recoCSCPtDiff");
 
    // The plots with number of tracks
    std::vector<TString> numType;
@@ -89,7 +87,7 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    for(std::vector<TString>::const_iterator itr = resolutionType.begin(); itr != resolutionType.end(); itr++){
 
 	// Pt Resolution
-	histoResoVec.push_back(new TH1F(*itr + "resoHist","",40,-20,20) );
+	histoResoVec.push_back(new TH1F(*itr + "resoHist","",13,-2,10) );
    	setHistTitles(histoResoVec[index], "P_{T} Resolution","Events");
    	histoResoVec[index]->SetStats(1);
    	histoResoVec[index]->Sumw2();
@@ -231,7 +229,6 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 		     if(cut->deltaR <= 0.2){
 			// Fill Histograms
 			histoResoVec[0]->Fill(getEMPtResolution(j,k) );
-			histoResoVec[2]->Fill(sample->vars.trkPt->at(j) - sample->vars.recoPt->at(k));
 		     }
 		}
 	     }
@@ -252,7 +249,6 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 		     if(cut->deltaR <= 0.2){
 			// Fill Histograms
 			histoResoVec[1]->Fill(getCSCPtResolution(j,k) );
-			histoResoVec[3]->Fill(sample->vars.csctf_trkPt->at(j) - sample->vars.recoPt->at(k));
 		     }
 		}
 	     }
@@ -288,7 +284,7 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 	(*itr)->Write();
    }
 
-   file->Close();
+   //file->Close();
 }
 
 //////////////////////////////////////////////////////////////////
@@ -329,6 +325,11 @@ float SampleHistos::getEMPtResolution(unsigned j, unsigned k)
 {
 	// Calculate the Pt Resolution 
 	float resolutionPt = 0;
+
+	// Debugging
+	//std::cout << "Pt Resolution: "
+		//<< (1/(sample->vars.trkPt->at(j)) - 1/(sample->vars.recoPt->at(k)) ) / (1/(sample->vars.recoPt->at(k)) ) << std::endl;
+
 	resolutionPt = (1/(sample->vars.trkPt->at(j)) - 1/(sample->vars.recoPt->at(k)) ) / (1/(sample->vars.recoPt->at(k)) );
 	return resolutionPt;
 }
@@ -343,4 +344,13 @@ float SampleHistos::getCSCPtResolution(unsigned j, unsigned k)
 	float resolutionPt = 0;
 	resolutionPt = (1/(sample->vars.csctf_trkPt->at(j)) - 1/(sample->vars.recoPt->at(k)) ) / (1/(sample->vars.recoPt->at(k)) );
 	return resolutionPt;
+}
+
+//////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------//
+//////////////////////////////////////////////////////////////////
+
+void SampleHistos::closeFile()
+{
+	file->Close();
 }
