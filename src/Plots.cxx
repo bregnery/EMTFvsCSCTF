@@ -67,6 +67,32 @@ Plots::Plots(Sample* insample, Cuts* cut, SampleHistos* inhistos, TString cutNam
 	
    }
 
+   gStyle->SetPadRightMargin(0.17);
+
+   for(std::vector<TH2F*>::const_iterator j = histos->histo2D.begin(); j != histos->histo2D.end(); j++){
+
+	    TString histoVarName((*j)->GetName());
+
+	    // Create Canvas
+  	    TCanvas* canvasTemp = new TCanvas("c" + histoVarName, "c" + histoVarName, width, height);
+	    
+	    // Set Histogram filling parameters
+	    (*j)->SetFillColor(kOrange);
+	    (*j)->SetLineColor(kOrange+7);
+	    (*j)->SetMarkerStyle(0);
+	    (*j)->SetFillStyle(1);
+	    (*j)->GetYaxis()->SetTitleOffset(2.0);
+	    (*j)->SetStats(0);
+	    (*j)->Draw("colz text");
+	
+	    canvasTemp->SaveAs("Hist_" + histoVarName + ".png");
+	
+	    // Save Canvas Vector
+	    canvas.push_back(canvasTemp);
+
+	    index++;
+   }
+
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -56,6 +56,15 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    resolutionTitle.push_back(" Resolution for EMTF");
    resolutionTitle.push_back(" Resolution for CSCTF");
 
+   // Eta comparison
+   std::vector<TString> etaCompType;
+   etaCompType.push_back("CSC15notEMTF");
+   etaCompType.push_back("EMTF15notCSC");
+
+   std::vector<TString> etaCompTitle;
+   etaCompTitle.push_back("for CSCTF Mode = 15 and EMTF Mode != 15");
+   etaCompTitle.push_back("for EMTF Mode = 15 and CSCTF Mode != 15");
+
    // The plots with number of tracks
    std::vector<TString> numType;
    numType.push_back("Diff");
@@ -69,6 +78,7 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    std::vector<TH1F*> histoModeVec;
    std::vector<TH1F*> histoResoVec;
    std::vector<TH1F*> histoNumVec;
+   std::vector<TH1F*> histoEtaCompVec;
 
    // Set Histogram Parameters
    int index = 0;
@@ -96,6 +106,19 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    }
 
    index = 0;
+   for(std::vector<TString>::const_iterator itr = etaCompType.begin(); itr != etaCompType.end(); itr++){
+
+	// eta
+	histoEtaCompVec.push_back(new TH1F(*itr + "Eta","#eta for " + etaCompTitle[index],9,-5,5));
+	setHistTitles(histoEtaCompVec[index],"#eta","Events");
+	histoEtaCompVec[index]->SetStats(1);
+	histoEtaCompVec[index]->Sumw2();
+	
+	index++;
+   }
+	
+
+   index = 0;
    int histoIndex = 0;
    int numResoHist = 0;
 
@@ -115,7 +138,7 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 	histoIndex++;
 
 	// Loop over mode values
-	for(int mode = 1; mode < 17; mode++){
+	for(int mode = 1; mode < 16; mode++){
 
 		// Create string from mode
 		TString modeStr = std::to_string(mode);
@@ -161,13 +184,13 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    }
 
    // CSCTF mode vs. EMTF mode for matched tracks
-   TH2F* ModeComparisonHist = new TH2F("ModeComparisonHist","",20,0,20,20,0,20); //bins, xmin, xmax, bins, ymin, ymax
+   TH2F* ModeComparisonHist = new TH2F("ModeComparisonHist","CSCTF vs. EMTF Mode",20,0,20,20,0,20); //bins, xmin, xmax, bins, ymin, ymax
    ModeComparisonHist->GetXaxis()->SetTitle("EMTF Mode");
    ModeComparisonHist->GetYaxis()->SetTitle("CSCTF Mode");
    ModeComparisonHist->Sumw2();
 
    // CSCTF Pt vs. EMTF Pt for mathced tracks
-   TH2F* PtComparisonHist = new TH2F("PtComparisonHist","",30,0,300,30,0,300); //bins, xmin, xmax, bins, ymin, ymax
+   TH2F* PtComparisonHist = new TH2F("PtComparisonHist","CSCTF vs. EMTF P_{T}",30,0,300,30,0,300); //bins, xmin, xmax, bins, ymin, ymax
    PtComparisonHist->GetXaxis()->SetTitle("EMTF P_{T} [GeV/c]");
    PtComparisonHist->GetYaxis()->SetTitle("CSCTF P_{T} [GeV/c]");
    PtComparisonHist->Sumw2();
@@ -261,6 +284,14 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 			// Fill Histograms
 			ModeComparisonHist->Fill(sample->vars.trkMode->at(j), sample->vars.csctf_trkMode->at(k));
 			PtComparisonHist->Fill(sample->vars.trkPt->at(j),sample->vars.csctf_trkPt->at(k)); // xvariable, yvariable
+
+			if(sample->vars.trkMode->at(j) != 15 && sample->vars.csctf_trkMode->at(k) == 15){
+			   histoEtaCompVec[0]->Fill(sample->vars.csctf_trkEta->at(k) );
+			}
+			
+			if(sample->vars.trkMode->at(j) == 15 && sample->vars.csctf_trkMode->at(k) != 15){
+			   histoEtaCompVec[1]->Fill(sample->vars.trkEta->at(j) );
+			}
 		     }
 		}
 	     }
@@ -287,23 +318,23 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 
 			histoIndex++;
 
-			for(int mode = 1; mode < 17; mode++){
-			     if(sample->vars.trkMode->at(j) = mode && sample->vars.trkPt->at(j) < 10){
+			for(int mode = 1; mode < 16; mode++){
+			     if(sample->vars.trkMode->at(j) == mode && sample->vars.trkPt->at(j) < 10){
 				 histoResoVec[histoIndex]->Fill(getEMPtResolution(j,k));
 			     }
 			     histoIndex++;
 
-			     if(sample->vars.trkMode->at(j) = mode && sample->vars.trkPt->at(j) < 30 && sample->vars.trkPt->at(j) > 10){
+			     if(sample->vars.trkMode->at(j) == mode && sample->vars.trkPt->at(j) < 30 && sample->vars.trkPt->at(j) > 10){
 				 histoResoVec[histoIndex]->Fill(getEMPtResolution(j,k));
 			     }
 			     histoIndex++;
 
-			     if(sample->vars.trkMode->at(j) = mode && sample->vars.trkPt->at(j) < 100 && sample->vars.trkPt->at(j) > 30){
+			     if(sample->vars.trkMode->at(j) == mode && sample->vars.trkPt->at(j) < 100 && sample->vars.trkPt->at(j) > 30){
 				 histoResoVec[histoIndex]->Fill(getEMPtResolution(j,k));
 			     }
 			     histoIndex++;
 
-			     if(sample->vars.trkMode->at(j) = mode && sample->vars.trkPt->at(j) > 100){
+			     if(sample->vars.trkMode->at(j) == mode && sample->vars.trkPt->at(j) > 100){
 				 histoResoVec[histoIndex]->Fill(getEMPtResolution(j,k));
 			     }
 			     histoIndex++;
@@ -333,23 +364,23 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 
 			histoIndex++;
 
-			for(int mode = 1; mode < 17; mode++){
-			     if(sample->vars.csctf_trkMode->at(j) = mode && sample->vars.csctf_trkPt->at(j) < 10){
+			for(int mode = 1; mode < 16; mode++){
+			     if(sample->vars.csctf_trkMode->at(j) == mode && sample->vars.csctf_trkPt->at(j) < 10){
 				 histoResoVec[histoIndex]->Fill(getCSCPtResolution(j,k));
 			     }
 			     histoIndex++;
 
-			     if(sample->vars.csctf_trkMode->at(j) = mode && sample->vars.csctf_trkPt->at(j) < 30 && sample->vars.csctf_trkPt->at(j) > 10){
+			     if(sample->vars.csctf_trkMode->at(j) == mode && sample->vars.csctf_trkPt->at(j) < 30 && sample->vars.csctf_trkPt->at(j) > 10){
 				 histoResoVec[histoIndex]->Fill(getCSCPtResolution(j,k));
 			     }
 			     histoIndex++;
 
-			     if(sample->vars.csctf_trkMode->at(j) = mode && sample->vars.csctf_trkPt->at(j) < 100 && sample->vars.csctf_trkPt->at(j) > 30){
+			     if(sample->vars.csctf_trkMode->at(j) == mode && sample->vars.csctf_trkPt->at(j) < 100 && sample->vars.csctf_trkPt->at(j) > 30){
 				 histoResoVec[histoIndex]->Fill(getCSCPtResolution(j,k));
 			     }
 			     histoIndex++;
 
-			     if(sample->vars.csctf_trkMode->at(j) = mode && sample->vars.csctf_trkPt->at(j) > 100){
+			     if(sample->vars.csctf_trkMode->at(j) == mode && sample->vars.csctf_trkPt->at(j) > 100){
 				 histoResoVec[histoIndex]->Fill(getCSCPtResolution(j,k));
 			     }
 			     histoIndex++;
@@ -371,6 +402,7 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    histo1D.push_back(histoModeVec);
    histo1D.push_back(histoNumVec);
    histo1D.push_back(histoResoVec);
+   histo1D.push_back(histoEtaCompVec);
 
    histo2D.push_back(ModeComparisonHist);
    histo2D.push_back(PtComparisonHist);
