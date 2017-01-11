@@ -70,7 +70,7 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    numType.push_back("Diff");
 
    std::vector<TString> numTitle;
-   numTitle.push_back("Difference in ");
+   numTitle.push_back("EMTF Tracks - CSCTF Tracks");
 
    // Histogram vectors
    std::vector<TH1F*> histoPtVec;
@@ -91,13 +91,13 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    	histoPtVec[index]->Sumw2();
 
 	// track Eta
-	histoEtaVec.push_back(new TH1F(*itr + "EtaHist",trackTypeTitle[index] + "#eta",20,0,6) );
+	histoEtaVec.push_back(new TH1F(*itr + "EtaHist",trackTypeTitle[index] + "#eta",30,1,2.5) );
    	setHistTitles(histoEtaVec[index],"#eta","Events");
    	histoEtaVec[index]->SetStats(1);
    	histoEtaVec[index]->Sumw2();
 
 	// track Mode
-   	histoModeVec.push_back(new TH1F(*itr + "ModeHist",trackTypeTitle[index] + "Mode",30,0,30) );
+   	histoModeVec.push_back(new TH1F(*itr + "ModeHist",trackTypeTitle[index] + "Mode",16,1,16) );
    	setHistTitles(histoModeVec[index],"Mode","Events");
    	histoModeVec[index]->SetStats(1);
    	histoModeVec[index]->Sumw2();
@@ -109,7 +109,7 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    for(std::vector<TString>::const_iterator itr = etaCompType.begin(); itr != etaCompType.end(); itr++){
 
 	// eta
-	histoEtaCompVec.push_back(new TH1F(*itr + "Eta","#eta for " + etaCompTitle[index],9,-5,5));
+	histoEtaCompVec.push_back(new TH1F(*itr + "Eta","#eta for " + etaCompTitle[index],30,1,2.5));
 	setHistTitles(histoEtaCompVec[index],"#eta","Events");
 	histoEtaCompVec[index]->SetStats(1);
 	histoEtaCompVec[index]->Sumw2();
@@ -130,7 +130,7 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 	}	
 
 	// Pt Resolution
-	histoResoVec.push_back(new TH1F(*itr + "resoHist","P_{T}" + resolutionTitle[index],13,-2,10) );
+	histoResoVec.push_back(new TH1F(*itr + "resoHist","P_{T}" + resolutionTitle[index],100,-2,10) );
    	setHistTitles(histoResoVec[index], "P_{T} Resolution","Events");
    	histoResoVec[histoIndex]->SetStats(1);
    	histoResoVec[histoIndex]->Sumw2();
@@ -143,25 +143,25 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
 		// Create string from mode
 		TString modeStr = std::to_string(mode);
 
-		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt10resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with P_{T} < 10", 13,-2,10) );
+		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt10resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with P_{T} < 10", 100,-2,10) );
    		histoResoVec[histoIndex]->SetStats(1);
    		histoResoVec[histoIndex]->Sumw2();
 
 		histoIndex++;
 
-		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt10_30resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with 10 < P_{T} < 30", 13,-2,10) );
+		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt10_30resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with 10 < P_{T} < 30", 100,-2,10) );
    		histoResoVec[histoIndex]->SetStats(1);
    		histoResoVec[histoIndex]->Sumw2();
 
 		histoIndex++;
 				
-		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt30_100resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with 30 < P_{T} < 1000", 13,-2,10) );
+		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt30_100resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with 30 < P_{T} < 100", 100,-2,10) );
    		histoResoVec[histoIndex]->SetStats(1);
    		histoResoVec[histoIndex]->Sumw2();
 
 		histoIndex++;
 
-		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt100resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with P_{T} > 100", 13,-2,10) );
+		histoResoVec.push_back(new TH1F(*itr + modeStr + "Pt100resoHist", "Mode = " + modeStr + " P_{T}" + resolutionTitle[index] +" with P_{T} > 100", 100,-2,10) );
    		histoResoVec[histoIndex]->SetStats(1);
    		histoResoVec[histoIndex]->Sumw2();
 
@@ -175,7 +175,7 @@ SampleHistos::SampleHistos(Sample* insample, Cuts* cut, TString cutName)
    for(std::vector<TString>::const_iterator itr = numType.begin(); itr != numType.end(); itr++){
 
 	// number of tracks
-	histoNumVec.push_back(new TH1F(*itr + "NumTrackHist",numTitle[index] + "the Number of Tracks",10,0,10) );
+	histoNumVec.push_back(new TH1F(*itr + "NumTrackHist",numTitle[index],21,-10,10) );
    	setHistTitles(histoNumVec[index], "Number of Tracks", "Events");
    	histoNumVec[index]->SetStats(1);
    	histoNumVec[index]->Sumw2();
@@ -443,7 +443,7 @@ float SampleHistos::getTrackNumDiff(std::size_t emTracks, std::size_t cscTracks)
   
 	// Calculate the difference in the number of tracks per event between CSCTF and EMTF
 	float trackNumDiff = 0;
-	trackNumDiff = std::abs(std::abs(emTracks) - std::abs(cscTracks) ); // fabs is an absolute value for floats
+	trackNumDiff = std::abs(emTracks) - std::abs(cscTracks); // fabs is an absolute value for floats
 	
 	// Debugging
 	//std::cout << "Difference of Number of tracks: " << trackNumDiff << std::endl;
