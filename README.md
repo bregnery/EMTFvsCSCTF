@@ -29,8 +29,3 @@ This makes an EMTFvCSCTF executable. Now, run the executable:
 
     ./EMTFvCSCTF
 
-This creates histograms and stores them in the file Data_Comparison_Hist.root. Finally, make .png files for the histograms:
-
-    cd plots/
-    python plot*.py
-
