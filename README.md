@@ -1,4 +1,4 @@
-# EMTFvCSCTFstudies
+# EMTFvsCSCTF
 This program compares the CMS EMTF and CSCTF rates and efficiencies.
 
 Installation
