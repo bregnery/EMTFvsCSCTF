@@ -1,5 +1,5 @@
 # EMTFvCSCTFstudies
-This program compares tracks from EMTF and CSCTF using the ntuples created by Andrew.
+This program compares the CMS EMTF and CSCTF rates and efficiencies.
 
 Installation
 ============
