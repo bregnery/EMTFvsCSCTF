@@ -9,6 +9,7 @@
 #include "Sample.h"
 #include "SampleHistos.h"
 #include "../selection/Cuts.h"
+#include "../selection/TagAndProbe.h"
 
 #include "TH1F.h"
 #include "TH2F.h"
@@ -24,10 +25,10 @@ class Plots
 {
    public:
 	Plots();
-	Plots(Sample* insample, Cuts* cut, SampleHistos* inhistos, TString cutName);
+	Plots(Sample* insample, Cuts* cut, TagAndProbe* inhistos, TString cutName);
 
 	Sample* sample;
-	SampleHistos* histos;
+	TagAndProbe* histos;
 	std::vector<TCanvas*> canvas;
 
 	void saveCanvas();

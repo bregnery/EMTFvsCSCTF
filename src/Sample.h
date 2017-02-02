@@ -7,7 +7,10 @@
 #include "TH1F.h"
 #include "TFile.h"
 #include "TTree.h"
+#include "TBranch.h"
+#include "TLeaf.h"
 #include "TEntryList.h"
+#include "TROOT.h"
 
 #include "VarSet.h"
 #include "DataFormats.h"
@@ -22,32 +25,23 @@ class Sample
         TString name;
         TString filename;
         TString treename;
-        TTree* tree;
-	//TTree* outTree;
+	int nEvents;
 
-        TString dir;           // DAS directory
+	void* EMTF;
+	void* RecoMuon;
+
         TString sampleType;    // "data", "signal", "background"
-
-        int nOriginal;         // the number of events run over to get this sample
-        int nOriginalWeighted; // the number of original events run over to get this sample accounting for genWeights
-        int nEvents;           // the number of events in the sample
 
         float lumi;            // the luminosity of the data or effective luminosity of MC
 
         VarSet vars;           // all of the variables from the ttree
 
         int getEntry(int i);                    // load the ith event from the ttree into vars
-        int getEntry(int i, TEntryList* list);  // load ith event from the list into vars
-                                                // the ith event in the list maps to the jth tree entry
-        //std::vector<float> trackNumDiff;
 
-        void setBranchAddresses(); // link the values in the tree to vars
-	//void addBranch(float newVar, TString newVarName, TBranch* newVarBranch); // Adds a branch with a leaf containing a floating point variable 
-	//void getOutFile();
 	void setAdditionalVariables();
 
     protected:
-        TFile* file;           // the file with the ttree
+        //TFile* file;           // the file with the ttree
 	//TFile* outFile;        // the output file that will contain new variables
 
 };

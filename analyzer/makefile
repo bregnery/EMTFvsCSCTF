@@ -19,23 +19,29 @@ CFLAGS = -I${LIBDIR} -c -g `root-config --cflags`
 MAIN = EMTFvCSCTF
 
 # link all of the objects to the main program
-${MAIN}: ${LIBDIR}Sample.o ${SDIR}Cuts.o ${LIBDIR}SampleHistos.o ${LIBDIR}Plots.o ${MAIN}.o
-	$(CC) $(LIBFLAGS) ${LIBDIR}Sample.o ${SDIR}Cuts.o ${LIBDIR}SampleHistos.o ${LIBDIR}Plots.o ${MAIN}.o -o ${MAIN}
+${MAIN}: ${LIBDIR}Sample.o ${SDIR}Cuts.o ${SDIR}TagAndProbe.o ${LIBDIR}Plots.o ${MAIN}.o
+	$(CC) $(LIBFLAGS) ${LIBDIR}Sample.o ${SDIR}Cuts.o ${SDIR}TagAndProbe.o ${LIBDIR}Plots.o ${MAIN}.o -o ${MAIN}
 
-${MAIN}.o: ${MAIN}.cxx ${LIBDIR}DataFormats.h ${LIBDIR}SampleHistos.h ${LIBDIR}Plots.h 
+${MAIN}.o: ${MAIN}.cxx ${LIBDIR}DataFormats.h ${SDIR}TagAndProbe.h ${LIBDIR}Plots.h 
 	$(CC) $(CFLAGS) ${MAIN}.cxx -o ${MAIN}.o
 
 # compile the dependencies
+${LIBDIR}L1UpgradeTree.o: ${LIBDIR}L1UpgradeTree.C ${LIBDIR}L1UpgradeTree.h
+	$(CC) $(CFLAGS) ${LIBDIR}L1UpgradeTree.C -o ${LIBDIR}L1UpgradeTree.o
+
+${LIBDIR}Muon2RecoTree.o: ${LIBDIR}Muon2RecoTree.C ${LIBDIR}Muon2RecoTree.h
+	$(CC) $(CFLAGS) ${LIBDIR}Muon2RecoTree.C -o ${LIBDIR}Muon2RecoTree.o
+
 ${LIBDIR}Sample.o: ${LIBDIR}Sample.cxx ${LIBDIR}Sample.h ${LIBDIR}VarSet.h ${LIBDIR}DataFormats.h
 	$(CC) $(CFLAGS) ${LIBDIR}Sample.cxx -o ${LIBDIR}Sample.o
 
 ${SDIR}Cuts.o: ${SDIR}Cuts.cxx ${SDIR}Cuts.h ${LIBDIR}Sample.h
 	$(CC) $(CFLAGS) ${SDIR}Cuts.cxx -o ${SDIR}Cuts.o
 
-${LIBDIR}SampleHistos.o: ${LIBDIR}SampleHistos.cxx ${LIBDIR}SampleHistos.h ${LIBDIR}Sample.h ${SDIR}Cuts.h
-	$(CC) $(CFLAGS) ${LIBDIR}SampleHistos.cxx -o ${LIBDIR}SampleHistos.o
+${SDIR}TagAndProbe.o: ${SDIR}TagAndProbe.cxx ${SDIR}TagAndProbe.h ${LIBDIR}Sample.h ${SDIR}Cuts.h
+	$(CC) $(CFLAGS) ${SDIR}TagAndProbe.cxx -o ${SDIR}TagAndProbe.o
 
-${LIBDIR}Plots.o: ${LIBDIR}Plots.cxx ${LIBDIR}Plots.h ${LIBDIR}SampleHistos.h ${LIBDIR}Sample.h ${SDIR}Cuts.h
+${LIBDIR}Plots.o: ${LIBDIR}Plots.cxx ${LIBDIR}Plots.h ${SDIR}TagAndProbe.h ${LIBDIR}Sample.h ${SDIR}Cuts.h
 	$(CC) $(CFLAGS) ${LIBDIR}Plots.cxx -o ${LIBDIR}Plots.o
 
 clean:

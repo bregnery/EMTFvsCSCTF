@@ -1,5 +1,6 @@
 #include "../src/Sample.h"
 #include "../selection/Cuts.h"
+#include "../selection/TagAndProbe.h"
 #include "SampleHistos.h"
 #include "Plots.h"
 
@@ -41,8 +42,7 @@ int main()
     
     std::cout << "============ Accessing Data ===============" << std::endl;           
     
-    TString datafilename = TString("/home/bregnery/EMTFvCSCTF/ntuples/EMTF_NTuple_ZMu_274442_emtfStage2Digis_40k.root");
-    //TString datafilename = TString("/cms/data/store/user/t2/users/acarnes/h2mumu/samples/stage1/data_from_json/25ns/golden/stage_1_singleMuon_RunDBoth_MINIAOD_GOLDEN_ALL.root");
+    TString datafilename = TString("../data/L1Ntuple_165.root");
     samples["Data"] = new Sample(datafilename, "Data", "data");
 
     // Debugging
@@ -62,12 +62,20 @@ int main()
     ///////////////////////////////////////////////////////////////////
     // Histograms------------------------------------------------------
     ///////////////////////////////////////////////////////////////////    
-    
+
+    /*    
     // map containg the Histogram variables
     std::map<std::string, SampleHistos*> sampleHistos;
     
     std::cout << "=========== Creating Data Histogram file ===========" << std::endl;
     sampleHistos["Data"] = new SampleHistos(samples["Data"], cuts["Data"], "Comparison");
+    */
+
+    // map containg the Histogram variables
+    std::map<std::string, TagAndProbe*> sampleHistos;
+    
+    std::cout << "=========== Creating Data Histogram file ===========" << std::endl;
+    sampleHistos["Data"] = new TagAndProbe(samples["Data"], cuts["Data"], "Comparison");
 
     ///////////////////////////////////////////////////////////////////
     // CMS style Plots-------------------------------------------------

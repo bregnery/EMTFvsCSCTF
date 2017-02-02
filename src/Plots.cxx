@@ -17,7 +17,7 @@ Plots::Plots(){}
 //-------------------------------------------------------------------//
 ///////////////////////////////////////////////////////////////////////
 
-Plots::Plots(Sample* insample, Cuts* cut, SampleHistos* inhistos, TString cutName)
+Plots::Plots(Sample* insample, Cuts* cut, TagAndProbe* inhistos, TString cutName)
 {
    /////////////////////////////////////////////////////////////////////
    // Save Class Variables----------------------------------------------
@@ -41,8 +41,7 @@ Plots::Plots(Sample* insample, Cuts* cut, SampleHistos* inhistos, TString cutNam
    // Create Plots------------------------------------------------------
    /////////////////////////////////////////////////////////////////////
 
-   for(std::vector<std::vector<TH1F*> >::const_iterator itr = histos->histo1D.begin(); itr != histos->histo1D.end(); itr++){
-      	for(std::vector<TH1F*>::const_iterator j = (*itr).begin(); j != (*itr).end(); j++){
+   for(std::vector<TH1F*>::const_iterator j = histos->histo1D.begin(); j != histos->histo1D.end(); j++){
 
 	    TString histoVarName((*j)->GetName());
 
@@ -63,12 +62,11 @@ Plots::Plots(Sample* insample, Cuts* cut, SampleHistos* inhistos, TString cutNam
 	    canvas.push_back(canvasTemp);
 
 	    index++;
-     	}
-	
    }
 
    gStyle->SetPadRightMargin(0.17);
 
+/*
    for(std::vector<TH2F*>::const_iterator j = histos->histo2D.begin(); j != histos->histo2D.end(); j++){
 
 	    TString histoVarName((*j)->GetName());
@@ -92,6 +90,7 @@ Plots::Plots(Sample* insample, Cuts* cut, SampleHistos* inhistos, TString cutNam
 
 	    index++;
    }
+*/
 
 }
 

@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <iostream>
+#include "TLeaf.h"
 #include "TLorentzVector.h"
 
 class VarSet
@@ -15,10 +16,11 @@ class VarSet
         VarSet(){};
         ~VarSet(){};
 
-        std::vector<float> *recoPt, *trkPt, *csctf_trkPt;
-	std::vector<float> *recoEta, *trkEta, *csctf_trkEta;
-	std::vector<float> *trkMode, *csctf_trkMode;
-	std::vector<float> *trkPhi, *csctf_trkPhi, *recoPhi;
+        std::vector<float> nRecoMuons, ntrkMuons, csctf_ntrkMuons;
+        std::vector<float> recoPt, trkPt, csctf_trkPt;
+	std::vector<float> recoEta, trkEta, csctf_trkEta;
+	std::vector<float> trkMode, csctf_trkMode;
+	std::vector<float> trkPhi, csctf_trkPhi, recoPhi;
 };
 
 #endif
