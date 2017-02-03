@@ -50,12 +50,12 @@ void Cuts::Matched(int i)
    sample->getEntry(i);
 
    // Loop over EMTF tracks in the event and see if they match reco tracks
-   for(unsigned j=0; j < sample->EMTF->muonEta.size(); j++)
+   for(unsigned j=0; j < sample->vars.trkEta.size(); j++)
    {
 	// Sets the j entry equal to false
 	// But changes it to true if there is reco track such that deltaR <= 0.2
         recoEMtemp.push_back(false);   
-	for(unsigned k=0; k < sample->RecoMuon->pt.size(); k++)
+	for(unsigned k=0; k < sample->vars.recoPt.size(); k++)
         {
              recoEMDeltaR(j,k); //important to note that j and k are switched here
              if(deltaR <= 0.2){
@@ -95,8 +95,8 @@ void Cuts::recoEMDeltaR(unsigned j, unsigned k)
 {
 // Calculates Delta R
 
-   float deltaPhi = sample->RecoMuon->phi[k] - sample->EMTF->muonPhi[j];
-   float deltaEta = sample->RecoMuon->eta[k] - sample->EMTF->muonEta[j]; 
+   float deltaPhi = sample->vars.recoPhi[k] - sample->vars.trkPhi[j];
+   float deltaEta = sample->vars.recoEta[k] - sample->vars.trkEta[j]; 
    deltaR = TMath::Sqrt(deltaPhi*deltaPhi + deltaEta*deltaEta);
 }
 

@@ -71,9 +71,9 @@ TagAndProbe::TagAndProbe(Sample* insample, Cuts* cut, TString cutName)
 	if(eventNum % reportEach == 0) std::cout << "Event: " << eventNum << std::endl;
 	sample->getEntry(eventNum);
 
-	if(sample->RecoMuon->pt.size() >= 2){
+	if(sample->vars.recoPt.size() >= 2){
 	    // Find an event with a matched muon
-	    for(unsigned trackNum=0; trackNum < sample->EMTF->muonEta.size(); trackNum++)
+	    for(unsigned trackNum=0; trackNum < sample->vars.trkEta.size(); trackNum++)
             {	
                 cut->recoEMDeltaR(trackNum,0);
                 if(cut->deltaR <= 0.2){
@@ -119,20 +119,20 @@ void TagAndProbe::Probe(TH1F* matchHist, TH1F* nomatchHist, int EMTFtag, Cuts* c
 {
     // Probe to see if there is a match for the second muon
     bool isMatched = false;
-    for(unsigned trackNum=0; trackNum < sample->EMTF->muonEta.size(); trackNum++)
+    for(unsigned trackNum=0; trackNum < sample->vars.trkEta.size(); trackNum++)
     {	
         cut->recoEMDeltaR(trackNum, 1); // Look for a second (indexed as 1) matching reco muon
         if(cut->deltaR <= 0.2 && trackNum != EMTFtag){
 	    isMatched = true;
 		  
             //Fill Matched Histogram 
-            matchHist->Fill(sample->RecoMuon->pt[1]);
+            matchHist->Fill(sample->vars.recoPt[1]);
         }
     } 
     
     if(isMatched == false){
         //Fill Unmatched Histogram
-   	nomatchHist->Fill(sample->RecoMuon->pt[1]);
+   	nomatchHist->Fill(sample->vars.recoPt[1]);
     }
 }
 
