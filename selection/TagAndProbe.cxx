@@ -59,6 +59,30 @@ TagAndProbe::TagAndProbe(Sample* insample, Cuts* cut, TString cutName)
    EMTFrecoEfficiencyPtHist->SetStats(1);
    EMTFrecoEfficiencyPtHist->Sumw2();
 
+   // CSCTF Matched Pt
+   TH1F* CSCTFrecoMatchPtHist = new TH1F("CSCTFrecoMatchPtHist", "CSCTF Matched Reconstructed Muon P_{T}",30,0,350);
+   setHistTitles(CSCTFrecoMatchPtHist,"P_{T} [GeV/c]","Events");
+   CSCTFrecoMatchPtHist->SetStats(1);
+   CSCTFrecoMatchPtHist->Sumw2();
+
+   // CSCTF Not Matched Pt
+   TH1F* CSCTFrecoNoMatchPtHist = new TH1F("CSCTFrecoNoMatchPtHist", "CSCTF Unmatched Reconstructed Muon P_{T}",30,0,350);
+   setHistTitles(CSCTFrecoNoMatchPtHist,"P_{T} [GeV/c]","Events");
+   CSCTFrecoNoMatchPtHist->SetStats(1);
+   CSCTFrecoNoMatchPtHist->Sumw2();
+
+   // CSCTF Matched + Unmatched Pt
+   TH1F* CSCTFrecoSumPtHist = new TH1F("CSCTFrecoSumPtHist", "CSCTF Matched + Unmatched Reconstructed Muon P_{T}",30,0,350);
+   setHistTitles(CSCTFrecoSumPtHist,"P_{T} [GeV/c]","Events");
+   CSCTFrecoSumPtHist->SetStats(1);
+   CSCTFrecoSumPtHist->Sumw2();
+
+   // CSCTF Efficiency vs Pt
+   TH1F* CSCTFrecoEfficiencyPtHist = new TH1F("CSCTFrecoEfficiencyPtHist", "CSCTF Efficency vs Muon P_{T}",30,0,350);
+   setHistTitles(CSCTFrecoEfficiencyPtHist,"P_{T} [GeV/c]","Efficency");
+   CSCTFrecoEfficiencyPtHist->SetStats(1);
+   CSCTFrecoEfficiencyPtHist->Sumw2();
+
    ////////////////////////////////////////////////////////////////////
    // Fill Histograms--------------------------------------------------
    ////////////////////////////////////////////////////////////////////
@@ -72,7 +96,7 @@ TagAndProbe::TagAndProbe(Sample* insample, Cuts* cut, TString cutName)
 	sample->getEntry(eventNum);
 
 	if(sample->vars.recoPt.size() >= 2){
-	    // Find an event with a matched muon
+	    // Find an event with a EMTF matched muon
 	    for(unsigned trackNum=0; trackNum < sample->vars.trkEta.size(); trackNum++)
             {	
                 cut->recoEMDeltaR(trackNum,0);
@@ -81,15 +105,26 @@ TagAndProbe::TagAndProbe(Sample* insample, Cuts* cut, TString cutName)
 	           Probe(EMTFrecoMatchPtHist, EMTFrecoNoMatchPtHist, trackNum, cut);
                 }
             }
+	    // Find an event with a CSCTF matched muon
+	    for(unsigned trackNum=0; trackNum < sample->vars.csctf_trkEta.size(); trackNum++)
+            {	
+                cut->recoCSCDeltaR(trackNum,0);
+                if(cut->deltaR <= 0.2){
+	           // Tag the Muon and Probe the event for more muons
+	           CSCProbe(CSCTFrecoMatchPtHist, CSCTFrecoNoMatchPtHist, trackNum, cut);
+                }
+            }
         }  
 
    }  
 
    // Add the histograms together
    EMTFrecoSumPtHist->Add(EMTFrecoMatchPtHist, EMTFrecoNoMatchPtHist);
+   CSCTFrecoSumPtHist->Add(CSCTFrecoMatchPtHist, CSCTFrecoNoMatchPtHist);
    
    // Divide the matched histogram by the sum
    EMTFrecoEfficiencyPtHist->Divide(EMTFrecoMatchPtHist, EMTFrecoSumPtHist);
+   CSCTFrecoEfficiencyPtHist->Divide(CSCTFrecoMatchPtHist, CSCTFrecoSumPtHist);
  
    /////////////////////////////////////////////////////////////////////
    // Save Class Vectors------------------------------------------------
@@ -99,6 +134,10 @@ TagAndProbe::TagAndProbe(Sample* insample, Cuts* cut, TString cutName)
    histo1D.push_back(EMTFrecoNoMatchPtHist);
    histo1D.push_back(EMTFrecoSumPtHist);
    histo1D.push_back(EMTFrecoEfficiencyPtHist);
+   histo1D.push_back(CSCTFrecoMatchPtHist);
+   histo1D.push_back(CSCTFrecoNoMatchPtHist);
+   histo1D.push_back(CSCTFrecoSumPtHist);
+   histo1D.push_back(CSCTFrecoEfficiencyPtHist);
 
    /////////////////////////////////////////////////////////////////////
    // Write Histograms--------------------------------------------------
@@ -122,6 +161,31 @@ void TagAndProbe::Probe(TH1F* matchHist, TH1F* nomatchHist, int EMTFtag, Cuts* c
     for(unsigned trackNum=0; trackNum < sample->vars.trkEta.size(); trackNum++)
     {	
         cut->recoEMDeltaR(trackNum, 1); // Look for a second (indexed as 1) matching reco muon
+        if(cut->deltaR <= 0.2 && trackNum != EMTFtag){
+	    isMatched = true;
+		  
+            //Fill Matched Histogram 
+            matchHist->Fill(sample->vars.recoPt[1]);
+        }
+    } 
+    
+    if(isMatched == false){
+        //Fill Unmatched Histogram
+   	nomatchHist->Fill(sample->vars.recoPt[1]);
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------//
+//////////////////////////////////////////////////////////////////
+
+void TagAndProbe::CSCProbe(TH1F* matchHist, TH1F* nomatchHist, int EMTFtag, Cuts* cut)
+{
+    // Probe to see if there is a match for the second muon
+    bool isMatched = false;
+    for(unsigned trackNum=0; trackNum < sample->vars.csctf_trkEta.size(); trackNum++)
+    {	
+        cut->recoCSCDeltaR(trackNum, 1); // Look for a second (indexed as 1) matching reco muon
         if(cut->deltaR <= 0.2 && trackNum != EMTFtag){
 	    isMatched = true;
 		  

@@ -30,6 +30,7 @@ class Sample
 	TFile* file;
 	TTree* L1UpgradeTree;
 	TTree* Muon2RecoTree;
+	TTree* l1legacyMuonEmuTree;
 	int nEvents;
 
 	TBranch* b_Muon_eta;
@@ -37,6 +38,8 @@ class Sample
 	TBranch* b_Muon_pt;
 	TBranch* b_L1Upgrade_muonEta;
 	TBranch* b_L1Upgrade_muonPhi;
+	TBranch* b_Legacy_muonEta;
+	TBranch* b_Legacy_muonPhi;
 
 	//L1UpgradeTree* EMTF;
 	//Muon2RecoTree* RecoMuon;

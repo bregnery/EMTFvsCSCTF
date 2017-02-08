@@ -26,6 +26,7 @@ class TagAndProbe
 	std::vector<TH2F*> histo2D;
 
         void Probe(TH1F* matchHist, TH1F* nomatchHist, int EMTFtag, Cuts* cut);
+        void CSCProbe(TH1F* matchHist, TH1F* nomatchHist, int EMTFtag, Cuts* cut);
 	void setHistTitles(TH1F* hist, TString xtitle, TString ytitle);
 	void closeFile();
 

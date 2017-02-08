@@ -72,6 +72,28 @@ void Cuts::Matched(int i)
    }  
    recoEMisMatched.push_back(recoEMtemp);
 
+   // Loop over CSCTF tracks in the event and see if they match reco tracks
+   for(unsigned j=0; j < sample->vars.csctf_trkEta.size(); j++)
+   {
+	// Sets the j entry equal to false
+	// But changes it to true if there is reco track such that deltaR <= 0.2
+        recoCSCtemp.push_back(false);   
+	for(unsigned k=0; k < sample->vars.recoPt.size(); k++)
+        {
+             recoCSCDeltaR(j,k); //important to note that j and k are switched here
+             if(deltaR <= 0.2){
+                 recoCSCtemp[j]=true;
+		 break;
+             }
+        }
+
+	//Debugging
+	//if(recoEMtemp[j] == false){
+	   //std::cout << "Event: " << i << " has an unmatched reco Track." << std::endl;
+	//}
+	
+   }  
+   recoCSCisMatched.push_back(recoCSCtemp);
 }
 
 ///////////////////////////////////////////////////////////////

@@ -43,6 +43,9 @@ Sample::Sample(TString infilename, TString iname, TString insampleType)
 
     Muon2RecoTree = (TTree*)file->Get("l1MuonRecoTree/Muon2RecoTree");
     setRecoBranchAddresses();
+
+    l1legacyMuonEmuTree = (TTree*)file->Get("l1legacyMuonEmuTree/L1UpgradeTree");
+    setCSCTFBranchAddresses();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,6 +96,10 @@ void Sample::setRecoBranchAddresses()
 
 void Sample::setCSCTFBranchAddresses()
 {
+    l1legacyMuonEmuTree->SetMakeClass(1);
+
+    l1legacyMuonEmuTree->SetBranchAddress("muonEta", &vars.csctf_trkEta, &b_Legacy_muonEta);
+    l1legacyMuonEmuTree->SetBranchAddress("muonPhi", &vars.csctf_trkPhi, &b_Legacy_muonPhi);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -113,10 +120,13 @@ void Sample::setAdditionalVariables()
 int Sample::getEntry(int i)
 {
     int j = i;
+    int k = i;
     L1UpgradeTree->LoadTree(i);
     L1UpgradeTree->GetEntry(i);
     Muon2RecoTree->LoadTree(j);
     Muon2RecoTree->GetEntry(j);
+    l1legacyMuonEmuTree->LoadTree(k);
+    l1legacyMuonEmuTree->GetEntry(k);
     return i;
 }
 

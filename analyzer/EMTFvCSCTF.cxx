@@ -42,7 +42,7 @@ int main()
     
     std::cout << "============ Accessing Data ===============" << std::endl;           
     
-    TString datafilename = TString("../data/L1Ntuple_165.root");
+    TString datafilename = TString("../data/L1Ntuple_807.root");
     samples["Data"] = new Sample(datafilename, "Data", "data");
 
     // Debugging
