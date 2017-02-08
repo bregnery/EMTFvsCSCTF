@@ -161,7 +161,7 @@ void TagAndProbe::Probe(TH1F* matchHist, TH1F* nomatchHist, int EMTFtag, Cuts* c
     for(unsigned trackNum=0; trackNum < sample->vars.trkEta.size(); trackNum++)
     {	
         cut->recoEMDeltaR(trackNum, 1); // Look for a second (indexed as 1) matching reco muon
-        if(cut->deltaR <= 0.2 && trackNum != EMTFtag){
+        if(cut->deltaR <= 0.2 && trackNum != EMTFtag && 1.25 < TMath::Abs(sample->vars.recoEta[1]) < 2.5){
 	    isMatched = true;
 		  
             //Fill Matched Histogram 
@@ -169,7 +169,7 @@ void TagAndProbe::Probe(TH1F* matchHist, TH1F* nomatchHist, int EMTFtag, Cuts* c
         }
     } 
     
-    if(isMatched == false){
+    if(isMatched == false && 1.25 < TMath::Abs(sample->vars.recoEta[1]) < 2.5){
         //Fill Unmatched Histogram
    	nomatchHist->Fill(sample->vars.recoPt[1]);
     }
@@ -186,7 +186,7 @@ void TagAndProbe::CSCProbe(TH1F* matchHist, TH1F* nomatchHist, int EMTFtag, Cuts
     for(unsigned trackNum=0; trackNum < sample->vars.csctf_trkEta.size(); trackNum++)
     {	
         cut->recoCSCDeltaR(trackNum, 1); // Look for a second (indexed as 1) matching reco muon
-        if(cut->deltaR <= 0.2 && trackNum != EMTFtag){
+        if(cut->deltaR <= 0.2 && trackNum != EMTFtag && 1.25 < TMath::Abs(sample->vars.recoEta[1]) < 2.5){
 	    isMatched = true;
 		  
             //Fill Matched Histogram 
@@ -194,7 +194,7 @@ void TagAndProbe::CSCProbe(TH1F* matchHist, TH1F* nomatchHist, int EMTFtag, Cuts
         }
     } 
     
-    if(isMatched == false){
+    if(isMatched == false && 1.25 < TMath::Abs(sample->vars.recoEta[1]) < 2.5){
         //Fill Unmatched Histogram
    	nomatchHist->Fill(sample->vars.recoPt[1]);
     }
